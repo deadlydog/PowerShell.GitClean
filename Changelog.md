@@ -2,19 +2,16 @@
 
 This page is a list of _notable_ changes made in each version.
 
-## v1.1.0 - April 20, 2024
+## v1.0.0 - January 1, 2099
 
 Features:
 
-- Run Pester tests during the build on Windows PowerShell too, to catch backward-incompatible changes earlier.
+- Initial release
 
 Fixes:
 
-- Use backslash instead of forward-slash to import module in Pester tests for Windows PowerShell backward compatibility.
+- Fixes
 
-## v1.0.0 - April 13, 2024
+Community contributions:
 
-Features:
-
-- Initial release.
-  Currently only supports creating repos for GitHub Actions workflows that publish to the public PowerShell Gallery.
+- @person: Contribution

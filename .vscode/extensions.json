@@ -3,7 +3,6 @@
 		"EditorConfig.EditorConfig",
 		"ms-vscode.powershell",
 		"streetsidesoftware.code-spell-checker",
-		"TylerLeonhardt.vscode-inline-values-powershell",
-		"yzhang.markdown-all-in-one"
+		"TylerLeonhardt.vscode-inline-values-powershell"
 	]
 }

@@ -1,8 +1,0 @@
-{
-	"recommendations": [
-		"EditorConfig.EditorConfig",
-		"ms-vscode.powershell",
-		"streetsidesoftware.code-spell-checker",
-		"TylerLeonhardt.vscode-inline-values-powershell"
-	]
-}
