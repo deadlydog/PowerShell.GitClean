@@ -50,6 +50,11 @@ function Clean-GitRepositories {
 
 		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files, searching up to 2 child directories deep.
 
+	.EXAMPLE
+		PS> Clean-GitRepositories -RootDirectoryPath 'C:\GitRepos' -Information -Verbose
+
+		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files, showing information messages and verbose output.
+
 	.LINK
 		https://github.com/deadlydog/PowerShell.GitClean
 	#>
@@ -124,7 +129,9 @@ function CleanGitRepository {
 
 	if ($PSCmdlet.ShouldProcess($gitRepositoryDirectoryPath, 'git clean -xfd')) {
 		Write-Verbose "Cleaning git repository at '$gitRepositoryDirectoryPath' using 'git clean -xfd'."
-		& git -C "$gitRepositoryDirectoryPath" clean -xdf > $null
+		[string] $gitCleanOutput = (& git -C "$gitRepositoryDirectoryPath" clean -xdf) | Out-String
+		Write-Verbose $gitCleanOutput
+		Write-Verbose '----------'
 	}
 }
 

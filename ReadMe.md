@@ -63,8 +63,11 @@ It accepts the following parameters:
 - `RootDirectoryPath` (required): The root directory where all of your git repositories are located. Alias: `Path`
 - `DirectorySearchDepth`: The depth to search for git repositories under the RootDirectoryPath. A large value may increase the time it takes to discover git repositories. Default is 4. Alias: `Depth`
 - `Force`: If specified, the cmdlet will clean all repositories, even if they have untracked files. __Be careful with this option!__
-- `WhatIf`: If specified, the cmdlet will not actually delete any files. It will only show you which repos would be cleaned, even if `-Force` is specified.
-- `Confirm`: If specified, the cmdlet will prompt you to confirm before cleaning each repository.
+- Common parameters supported:
+  - `WhatIf`: If specified, the cmdlet will not actually delete any files. It will only show you which repos would be cleaned, even if `-Force` is specified.
+  - `Confirm`: If specified, the cmdlet will prompt you to confirm before cleaning each repository.
+  - `Information`: If specified, the cmdlet will output general information about what it is doing.
+  - `Verbose`: If specified, the cmdlet will output verbose information about what it is doing.
 
 ### Examples
 
@@ -110,6 +113,14 @@ And to only clean `repo1`, `repo2`, `repo3`, and `repo4`:
 
 ```powershell
 Clean-GitRepositories -Path 'C:\path\to\repositories' -Depth 1
+```
+
+---
+
+Show general and verbose information about what the cmdlet is doing:
+
+```powershell
+Clean-GitRepositories -Path 'C:\path\to\repositories' -Information -Verbose
 ```
 
 ## ➕ How to contribute
