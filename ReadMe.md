@@ -1,3 +1,23 @@
+<p align="center">
+  <a href="https://github.com/deadlydog/PowerShell.GitClean/actions/workflows/build-and-test-powershell-module.yml"><img alt="Build status" src="https://github.com/deadlydog/PowerShell.GitClean/actions/workflows/build-and-test-powershell-module.yml/badge.svg"></a>
+  <a href="https://github.com/deadlydog/PowerShell.GitClean/actions/workflows/build-test-and-deploy-powershell-module.yml"><img alt="Deploy status" src="https://github.com/deadlydog/PowerShell.GitClean/actions/workflows/build-test-and-deploy-powershell-module.yml/badge.svg"></a>
+  <a href="https://github.com/deadlydog/PowerShell.GitClean/blob/main/License.md"><img alt="License" src="https://img.shields.io/github/license/deadlydog/PowerShell.GitClean.svg"></a>
+  <a href="https://github.com/deadlydog/PowerShell.GitClean/blob/main/docs/Contributing.md"><img alt="PRs welcome" src="https://img.shields.io/badge/PRs-welcome-brightgreen.svg"></a>
+</p>
+
+<p align="center">
+  <a href="https://www.powershellgallery.com/packages/GitClean"><img alt="Stable PowerShell module version" src="https://img.shields.io/powershellgallery/v/GitClean.svg"></a>
+  <a href="https://www.powershellgallery.com/packages/GitClean"><img alt="Prerelease PowerShell module version" src="https://img.shields.io/powershellgallery/vpre/GitClean.svg?include_prereleases&label=powershell%20gallery%20prerelease&colorB=yellow"></a>
+  <a href="https://www.powershellgallery.com/packages/GitClean"><img src="https://img.shields.io/powershellgallery/dt/GitClean.svg"></a>
+</p>
+
+<p align="center">
+  <!-- Must add 'Windows', 'MacOS', and 'Linux' to the module manifest tags for them to show up on the Platforms badge. -->
+  <img src="https://img.shields.io/powershellgallery/p/GitClean.svg">
+  <img src="https://img.shields.io/github/languages/top/deadlydog/PowerShell.GitClean.svg">
+  <img src="https://img.shields.io/github/languages/code-size/deadlydog/PowerShell.GitClean.svg">
+</p>
+
 # GitClean PowerShell Module
 
 ## 💬 Description
