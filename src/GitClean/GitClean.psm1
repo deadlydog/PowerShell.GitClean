@@ -59,7 +59,7 @@ function Get-GitRepositoryDirectoryPaths([string] $rootDirectory, [int] $depth) 
 
 function Test-GitRepositoryHasUntrackedFiles([string] $gitRepositoryDirectoryPath) {
 	Set-Location -Path $gitRepositoryDirectoryPath
-	$gitOutput = Invoke-Expression "git -C ""$gitRepositoryDirectoryPath"" status" | Out-String
+	$gitOutput = (& git -C "$gitRepositoryDirectoryPath" status) | Out-String
 
 	[bool] $gitRepoHasUntrackedFiles = $gitOutput.Contains('Untracked files')
 	return $gitRepoHasUntrackedFiles
@@ -72,7 +72,7 @@ function Clean-GitRepository([string] $gitRepositoryDirectoryPath, [bool] $whatI
 	if ($whatIf) {
 		Write-Host "What If is enabled, so not cleaning git repository at '$gitRepositoryDirectoryPath'."
 	} else {
-		Invoke-Expression "git -C ""$gitRepositoryDirectoryPath"" clean -xdf" > $null
+		& git -C "$gitRepositoryDirectoryPath" clean -xdf > $null
 	}
 }
 

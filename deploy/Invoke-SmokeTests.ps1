@@ -32,7 +32,7 @@ Describe 'Clean-GitRepositories' {
 
 		function CreateGitRepository([string] $directoryPath, [switch] $hasUntrackedFile) {
 			New-Item -Path $directoryPath -ItemType Directory -Force > $null
-			Invoke-Expression "git -C ""$directoryPath"" init" > $null
+			& git -C "$directoryPath" init > $null
 
 			if ($hasUntrackedFile) {
 				New-Item -Path (Join-Path -Path $directoryPath -ChildPath $UntrackedFileName) -ItemType File > $null
