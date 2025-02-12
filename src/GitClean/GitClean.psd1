@@ -24,7 +24,7 @@
   Copyright = '(c) Daniel Schroeder. All rights reserved.'
 
   # Description of the functionality provided by this module
-  Description = 'Cmdlets for doing Git operations on multiple repositories under a parent directory, such as cleaning all repos.'
+  Description = 'Cmdlet for performing a "git clean -xfd" on all repositories under a parent directory.'
 
   # Minimum version of the PowerShell engine required by this module
   # PowerShellVersion = ''
