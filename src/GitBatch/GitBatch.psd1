@@ -24,7 +24,7 @@
   Copyright = '(c) Daniel Schroeder. All rights reserved.'
 
   # Description of the functionality provided by this module
-  Description = 'GitBatch module.'
+  Description = 'Cmdlets for doing Git operations on multiple repositories under a parent directory, such as cleaning all repos.'
 
   # Minimum version of the PowerShell engine required by this module
   # PowerShellVersion = ''
@@ -91,13 +91,13 @@
     PSData = @{
 
       # Tags applied to this module. These help with module discovery in online galleries.
-      # Tags = @()
+      Tags = @('Git', 'Batch', 'Repository', 'Repositories', 'Clean', 'Pull')
 
       # A URL to the license for this module.
-      # LicenseUri = ''
+      LicenseUri = 'https://github.com/deadlydog/PowerShell.GitBatch/blob/main/License.md'
 
       # A URL to the main website for this project.
-      # ProjectUri = ''
+      ProjectUri = 'https://github.com/deadlydog/PowerShell.GitBatch'
 
       # A URL to an icon representing this module.
       # IconUri = ''
