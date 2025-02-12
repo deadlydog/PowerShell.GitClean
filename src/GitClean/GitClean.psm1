@@ -46,13 +46,16 @@ function Clean-GitRepositories {
 		Prompts the user to confirm before cleaning each git repository.
 
 	.EXAMPLE
-		PS> Clean-GitRepositories -RootDirectoryPath 'C:\GitRepos' -DirectorySearchDepth 3
+		PS> Clean-GitRepositories -RootDirectoryPath 'C:\GitRepos' -DirectorySearchDepth 2
 
-		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files, searching up to 3 child directories deep.
+		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files, searching up to 2 child directories deep.
 
 	.LINK
 		https://github.com/deadlydog/PowerShell.GitClean
 	#>
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Justification = 'Using Git terminology')]
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Using Git terminology')]
+	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Force', Justification = 'Used in a child scope')]
 	[CmdletBinding(SupportsShouldProcess)]
 	param (
 		[Parameter(Mandatory = $true, HelpMessage = 'The root directory to search for git repositories in.')]
@@ -68,15 +71,15 @@ function Clean-GitRepositories {
 	)
 
 	Write-Information "Searching for git repositories in '$RootDirectoryPath'..."
-	[string[]] $gitRepositoryDirectoryPaths = Get-GitRepositoryDirectoryPaths -rootDirectory $RootDirectoryPath -depth $DirectorySearchDepth
+	[string[]] $gitRepositoryDirectoryPaths = GetGitRepositoryDirectoryPaths -rootDirectory $RootDirectoryPath -depth $DirectorySearchDepth
 
 	Write-Information "Testing git repositories to see which ones can be safely cleaned..."
 	$gitRepositoryDirectoryPathsWithUntrackedFiles = [System.Collections.ArrayList]::new()
 	$gitRepositoryDirectoryPathsThatAreSafeToClean = [System.Collections.ArrayList]::new()
-	ForEach-WithProgress -collection $gitRepositoryDirectoryPaths -scriptBlock {
+	ForEachWithProgress -collection $gitRepositoryDirectoryPaths -scriptBlock {
 		param([string] $gitRepoDirectoryPath)
 
-		[bool] $gitRepoHasUntrackedFiles = Test-GitRepositoryHasUntrackedFiles -gitRepositoryDirectoryPath $gitRepoDirectoryPath
+		[bool] $gitRepoHasUntrackedFiles = TestGitRepositoryHasUntrackedFile -gitRepositoryDirectoryPath $gitRepoDirectoryPath
 		if ($gitRepoHasUntrackedFiles -and -not $Force) {
 			$gitRepositoryDirectoryPathsWithUntrackedFiles.Add($gitRepoDirectoryPath) > $null
 		} else {
@@ -85,10 +88,10 @@ function Clean-GitRepositories {
 	} -activity "Checking for untracked files" -status "Checking git repo '{0}'"
 
 	Write-Information "Cleaning git repositories..."
-	ForEach-WithProgress -collection $gitRepositoryDirectoryPathsThatAreSafeToClean -scriptBlock {
+	ForEachWithProgress -collection $gitRepositoryDirectoryPathsThatAreSafeToClean -scriptBlock {
 		param([string] $gitRepoDirectoryPath)
 
-		Clean-GitRepository -gitRepositoryDirectoryPath $gitRepoDirectoryPath
+		CleanGitRepository -gitRepositoryDirectoryPath $gitRepoDirectoryPath
 	} -activity "Cleaning git repositories" -status "Cleaning git repo '{0}'"
 
 	if ($gitRepositoryDirectoryPathsWithUntrackedFiles.Count -gt 0) {
@@ -97,7 +100,7 @@ function Clean-GitRepositories {
 	}
 }
 
-function Get-GitRepositoryDirectoryPaths([string] $rootDirectory, [int] $depth) {
+function GetGitRepositoryDirectoryPaths([string] $rootDirectory, [int] $depth) {
 	[string[]] $gitRepoPaths =
 	Get-ChildItem -Path $rootDirectory -Include '.git' -Recurse -Depth $depth -Force -Directory |
 		ForEach-Object {
@@ -108,14 +111,14 @@ function Get-GitRepositoryDirectoryPaths([string] $rootDirectory, [int] $depth) 
 	return $gitRepoPaths
 }
 
-function Test-GitRepositoryHasUntrackedFiles([string] $gitRepositoryDirectoryPath) {
+function TestGitRepositoryHasUntrackedFile([string] $gitRepositoryDirectoryPath) {
 	$gitOutput = (& git -C "$gitRepositoryDirectoryPath" status) | Out-String
 
 	[bool] $gitRepoHasUntrackedFiles = $gitOutput.Contains('Untracked files')
 	return $gitRepoHasUntrackedFiles
 }
 
-function Clean-GitRepository {
+function CleanGitRepository {
 	[CmdletBinding(SupportsShouldProcess)]
 	param([string] $gitRepositoryDirectoryPath)
 
@@ -128,7 +131,7 @@ function Clean-GitRepository {
 # Adding all the code inline to support Write-Progress made things feel very messy.
 # This function helps clean that up, but does add some complexity to the script, especially because
 # you cannot assign a variable in the script block a new value and have it persist outside the script block.
-function ForEach-WithProgress([object[]] $collection, [scriptblock] $scriptBlock, [string] $activity, [string] $status) {
+function ForEachWithProgress([object[]] $collection, [scriptblock] $scriptBlock, [string] $activity, [string] $status) {
 	[int] $numberOfItems = $collection.Count
 	[int] $numberOfItemsProcessed = 0
 	$collection | ForEach-Object {

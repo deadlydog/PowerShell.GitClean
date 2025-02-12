@@ -45,7 +45,7 @@ Describe 'Clean-GitRepositories' {
 			$RootDirectoryPath = NewRandomRootDirectoryPath
 			$Repo1Path = NewRandomDirectoryPath -rootDirectoryPath $RootDirectoryPath
 
-			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'It is used in the It block.')]
+			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'Used in the It blocks')]
 			$Repo1UntrackedFilePath = Join-Path -Path $Repo1Path -ChildPath $UntrackedFileName
 		}
 
@@ -105,11 +105,11 @@ Describe 'Clean-GitRepositories' {
 			$Repo2Path = NewRandomDirectoryPath -rootDirectoryPath $RootDirectoryPath
 			$Repo3Path = NewRandomDirectoryPath -rootDirectoryPath $RootDirectoryPath
 
-			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'It is used in the It block.')]
+			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'Used in the It blocks')]
 			$Repo1UntrackedFilePath = Join-Path -Path $Repo1Path -ChildPath $UntrackedFileName
-			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'It is used in the It block.')]
+			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'Used in the It blocks')]
 			$Repo2UntrackedFilePath = Join-Path -Path $Repo2Path -ChildPath $UntrackedFileName
-			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'It is used in the It block.')]
+			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'Used in the It blocks')]
 			$Repo3UntrackedFilePath = Join-Path -Path $Repo3Path -ChildPath $UntrackedFileName
 		}
 
