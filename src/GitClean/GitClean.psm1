@@ -1,5 +1,59 @@
 function Clean-GitRepositories {
-	[CmdletBinding()]
+	<#
+	.SYNOPSIS
+		Cleans all git repositories under a directory.
+
+	.DESCRIPTION
+		This cmdlet will search for all git repositories in a directory and it's children and clean them using 'git clean -xfd'.
+		By default, it will only clean repositories that do not have untracked files. If the -Force switch is provided,
+		it will clean all repositories, even if they have untracked files. If the -WhatIf switch is provided, it will
+		only show which repositories would be cleaned, but will not actually clean them. The -Confirm switch can be used
+		to prompt the user to confirm before cleaning each repository.
+
+	.PARAMETER RootDirectoryPath
+		The root directory to search for git repositories under. Alias: Path.
+
+	.PARAMETER DirectorySearchDepth
+		The max depth from the root directory to search for git repositories in. Default is 4. Alias: Depth.
+
+	.PARAMETER Force
+		If provided, all git repositories will be cleaned, even if they have untracked files. Be careful with this switch!
+
+	.PARAMETER WhatIf
+		If provided, no git repositories will be cleaned; it will just show which repos would be cleaned, even if -Force is provided.
+
+	.PARAMETER Confirm
+		Prompts the user to confirm before cleaning each git repository.
+
+	.EXAMPLE
+		PS> Clean-GitRepositories -RootDirectoryPath 'C:\GitRepos'
+
+		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files.
+
+	.EXAMPLE
+		PS> Clean-GitRepositories -RootDirectoryPath 'C:\GitRepos' -Force
+
+		Cleans all git repositories under 'C:\GitRepos', even if they have untracked files.
+
+	.EXAMPLE
+		PS> Clean-GitRepositories -RootDirectoryPath 'C:\GitRepos' -WhatIf
+
+		Shows which git repositories under 'C:\GitRepos' would be cleaned, but does not actually clean them.
+
+	.EXAMPLE
+		PS> Clean-GitRepositories -RootDirectoryPath 'C:\GitRepos' -Confirm
+
+		Prompts the user to confirm before cleaning each git repository.
+
+	.EXAMPLE
+		PS> Clean-GitRepositories -RootDirectoryPath 'C:\GitRepos' -DirectorySearchDepth 3
+
+		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files, searching up to 3 child directories deep.
+
+	.LINK
+		https://github.com/deadlydog/PowerShell.GitClean
+	#>
+	[CmdletBinding(SupportsShouldProcess)]
 	param (
 		[Parameter(Mandatory = $true, HelpMessage = 'The root directory to search for git repositories in.')]
 		[Alias('Path')]
