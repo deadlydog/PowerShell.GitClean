@@ -75,6 +75,8 @@ function Clean-GitRepositories {
 		[switch] $Force = $false
 	)
 
+	[DateTime] $startTime = Get-Date
+
 	Write-Information "Searching for git repositories in '$RootDirectoryPath'..."
 	[string[]] $gitRepositoryDirectoryPaths = GetGitRepositoryDirectoryPaths -rootDirectory $RootDirectoryPath -depth $DirectorySearchDepth
 
@@ -103,6 +105,20 @@ function Clean-GitRepositories {
 		Write-Information "The following git repo directories have untracked files, so they were not cleaned: " +
 			($gitRepositoryDirectoryPathsWithUntrackedFiles -join [System.Environment]::NewLine)
 	}
+
+	[DateTime] $finishTime = Get-Date
+	[TimeSpan] $duration = $finishTime - $startTime
+
+	# Build and write the result object.
+	[PSCustomObject] $result = @{
+		RootDirectoryPath = $RootDirectoryPath
+		DirectorySearchDepth = $DirectorySearchDepth
+		NumberOfGitRepositoriesFound = $gitRepositoryDirectoryPaths.Count
+		GitRepositoriesCleaned = $gitRepositoryDirectoryPathsThatAreSafeToClean
+		GitRepositoriesWithUntrackedFiles = $gitRepositoryDirectoryPathsWithUntrackedFiles
+		Duration = $duration
+	}
+	Write-Output $result
 }
 
 function GetGitRepositoryDirectoryPaths([string] $rootDirectory, [int] $depth) {
