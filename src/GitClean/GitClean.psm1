@@ -109,7 +109,6 @@ function Get-GitRepositoryDirectoryPaths([string] $rootDirectory, [int] $depth) 
 }
 
 function Test-GitRepositoryHasUntrackedFiles([string] $gitRepositoryDirectoryPath) {
-	Set-Location -Path $gitRepositoryDirectoryPath
 	$gitOutput = (& git -C "$gitRepositoryDirectoryPath" status) | Out-String
 
 	[bool] $gitRepoHasUntrackedFiles = $gitOutput.Contains('Untracked files')
@@ -120,10 +119,8 @@ function Clean-GitRepository {
 	[CmdletBinding(SupportsShouldProcess)]
 	param([string] $gitRepositoryDirectoryPath)
 
-	Write-Verbose "Cleaning git repository at '$gitRepositoryDirectoryPath' using 'git clean -xfd'."
-	Set-Location -Path $gitRepositoryDirectoryPath
-
 	if ($PSCmdlet.ShouldProcess($gitRepositoryDirectoryPath, 'git clean -xfd')) {
+		Write-Verbose "Cleaning git repository at '$gitRepositoryDirectoryPath' using 'git clean -xfd'."
 		& git -C "$gitRepositoryDirectoryPath" clean -xdf > $null
 	}
 }
