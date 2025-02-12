@@ -3,18 +3,21 @@ function Clean-GitRepositories {
 	param (
 		[Parameter(Mandatory = $true, HelpMessage = 'The root directory to search for git repositories in.')]
 		[Alias('Path')]
-		[string] $GitRepositoriesRootDirectoryPath,
+		[string] $RootDirectoryPath,
 
 		[Parameter(Mandatory = $false, HelpMessage = 'The max depth from the root directory to search for git repositories in.')]
 		[Alias('Depth')]
 		[int] $DirectorySearchDepth = 4,
 
-		[Parameter(Mandatory = $false, HelpMessage = 'False to actually clean the git repositories, True to just show which repos would be cleaned.')]
+		[Parameter(Mandatory = $false, HelpMessage = 'If provided all git repositories will be cleaned, even if they have untracked files.')]
+		[switch] $Force = $false,
+
+		[Parameter(Mandatory = $false, HelpMessage = 'If provided no git repositories will be cleaned; it will just show which repos would be cleaned.')]
 		[switch] $WhatIf = $false
 	)
 
-	Write-Information "Searching for git repositories in '$GitRepositoriesRootDirectoryPath'..."
-	[string[]] $gitRepositoryDirectoryPaths = Get-GitRepositoryDirectoryPaths -rootDirectory $GitRepositoriesRootDirectoryPath -depth $DirectorySearchDepth
+	Write-Information "Searching for git repositories in '$RootDirectoryPath'..."
+	[string[]] $gitRepositoryDirectoryPaths = Get-GitRepositoryDirectoryPaths -rootDirectory $RootDirectoryPath -depth $DirectorySearchDepth
 
 	Write-Information "Testing git repositories to see which ones can be safely cleaned..."
 	$gitRepositoryDirectoryPathsWithUntrackedFiles = [System.Collections.ArrayList]::new()
@@ -23,7 +26,7 @@ function Clean-GitRepositories {
 		param([string] $gitRepoDirectoryPath)
 
 		[bool] $gitRepoHasUntrackedFiles = Test-GitRepositoryHasUntrackedFiles -gitRepositoryDirectoryPath $gitRepoDirectoryPath
-		if ($gitRepoHasUntrackedFiles) {
+		if ($gitRepoHasUntrackedFiles -and -not $Force) {
 			$gitRepositoryDirectoryPathsWithUntrackedFiles.Add($gitRepoDirectoryPath) > $null
 		} else {
 			$gitRepositoryDirectoryPathsThatAreSafeToClean.Add($gitRepoDirectoryPath) > $null
