@@ -2,16 +2,6 @@
 
 This page is a list of _notable_ changes made in each version.
 
-## v1.0.0 - January 1, 2099
-
-Features:
+## v0.0.1 - Feb 11, 2015
 
 - Initial release
-
-Fixes:
-
-- Fixes
-
-Community contributions:
-
-- @person: Contribution
