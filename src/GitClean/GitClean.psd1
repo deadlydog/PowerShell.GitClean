@@ -91,7 +91,7 @@
     PSData = @{
 
       # Tags applied to this module. These help with module discovery in online galleries.
-      Tags = @('Git', 'Batch', 'Repository', 'Repositories', 'Clean', 'Pull')
+      Tags = @('Git', 'Clean', 'Delete', 'Repository', 'Repositories')
 
       # A URL to the license for this module.
       LicenseUri = 'https://github.com/deadlydog/PowerShell.GitClean/blob/main/License.md'
@@ -103,7 +103,7 @@
       # IconUri = ''
 
       # ReleaseNotes of this module
-      # ReleaseNotes = ''
+      ReleaseNotes = 'https://github.com/deadlydog/PowerShell.GitClean/blob/main/Changelog.md'
 
       # Prerelease string of this module
       # Prerelease = ''
