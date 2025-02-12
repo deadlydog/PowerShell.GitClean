@@ -133,8 +133,10 @@ function GetGitRepositoryDirectoryPaths([string] $rootDirectory, [int] $depth) {
 }
 
 function TestGitRepositoryHasUntrackedFile([string] $gitRepositoryDirectoryPath) {
-	$gitOutput = (& git -C "$gitRepositoryDirectoryPath" status) | Out-String
+	[string] $gitOutput = (& git -C "$gitRepositoryDirectoryPath" status) | Out-String
 
+	# NOTE: Git.exe currently only supports English output.
+	# If that ever changes, we may need to allow the user to provide the 'Untracked files' string to look for.
 	[bool] $gitRepoHasUntrackedFiles = $gitOutput.Contains('Untracked files')
 	return $gitRepoHasUntrackedFiles
 }
