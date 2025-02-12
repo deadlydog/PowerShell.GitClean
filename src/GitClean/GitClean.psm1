@@ -14,7 +14,7 @@ function Clean-GitRepositories {
 		The root directory to search for git repositories under. Alias: Path.
 
 	.PARAMETER DirectorySearchDepth
-		The max depth from the root directory to search for git repositories in. Default is 4. Alias: Depth.
+		The max depth from the root directory to search for git repositories in. Default is 3. Alias: Depth.
 
 	.PARAMETER Force
 		If provided, all git repositories will be cleaned, even if they have untracked files. Be careful with this switch!
@@ -69,7 +69,7 @@ function Clean-GitRepositories {
 
 		[Parameter(Mandatory = $false, HelpMessage = 'The max depth from the root directory to search for git repositories in.')]
 		[Alias('Depth')]
-		[int] $DirectorySearchDepth = 4,
+		[int] $DirectorySearchDepth = 3,
 
 		[Parameter(Mandatory = $false, HelpMessage = 'If provided all git repositories will be cleaned, even if they have untracked files.')]
 		[switch] $Force = $false

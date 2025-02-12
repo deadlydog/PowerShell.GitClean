@@ -61,7 +61,7 @@ This module only provides one cmdlet: `Clean-GitRepositories`
 It accepts the following parameters:
 
 - `RootDirectoryPath` (required): The root directory where all of your git repositories are located. Alias: `Path`
-- `DirectorySearchDepth`: The depth to search for git repositories under the RootDirectoryPath. A large value may increase the time it takes to discover git repositories. Default is 4. Alias: `Depth`
+- `DirectorySearchDepth`: The depth to search for git repositories under the RootDirectoryPath. A large value may increase the time it takes to discover git repositories. Default is 3. Alias: `Depth`
 - `Force`: If specified, the cmdlet will clean all repositories, even if they have untracked files. __Be careful with this option!__
 - Common parameters supported:
   - `WhatIf`: If specified, the cmdlet will not actually delete any files. It will only show you which repos would be cleaned, even if `-Force` is specified.
