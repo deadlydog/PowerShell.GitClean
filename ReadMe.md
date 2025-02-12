@@ -15,9 +15,9 @@ Steps 1 and 2 were already performed to get this far.
 
 If you already have the module, manifest, and tests written, replace the following files with your module's files:
 
-- [GitBatch.psm1](/src/GitBatch/GitBatch.psm1)
-- [GitBatch.psd1](/src/GitBatch/GitBatch.psd1)
-- [GitBatch.Tests.ps1](/src/GitBatch/GitBatch.Tests.ps1)
+- [GitClean.psm1](/src/GitClean/GitClean.psm1)
+- [GitClean.psd1](/src/GitClean/GitClean.psd1)
+- [GitClean.Tests.ps1](/src/GitClean/GitClean.Tests.ps1)
 
 Otherwise, use these files as a starting point for your new module.
 
@@ -45,9 +45,9 @@ If you will be publishing the module to a custom PowerShell Gallery feed, you wi
 1. Navigate to <https://www.powershellgallery.com/account/apikeys>, and login if necessary.
 1. Click `Create` to create a new API key for this module.
 1. For the `Key Name` it is a good idea to include the name of your module.
-   e.g. `GitBatch module CI/CD pipeline`
+   e.g. `GitClean module CI/CD pipeline`
 1. Ensure the `Push new packages and package versions` scope is selected.
-1. For the `Glob Pattern` enter the name of your module: `GitBatch`
+1. For the `Glob Pattern` enter the name of your module: `GitClean`
 1. Click the `Create` button to create the API key.
 1. Click the `Copy` button on the new API key to copy it to your clipboard, as you will need it for the next section.
 
@@ -122,7 +122,7 @@ Coming soon.
 
 The following boilerplate git repository files should be reviewed and updated or removed as needed.
 
-- [GitBatch.psd1](/src/GitBatch/GitBatch.psd1): Update the module manifest with your module's information, such as the Description and have the ProjectUri link to this repository, etc.
+- [GitClean.psd1](/src/GitClean/GitClean.psd1): Update the module manifest with your module's information, such as the Description and have the ProjectUri link to this repository, etc.
 - [Changelog](/Changelog.md): If you don't plan to track a changelog, remove this file and it's reference from the ReadMe.
 - [License](/License.md): Update to match your module's license, and ensure it uses the correct name and year in the copyright.
 - [Contributing](/docs/Contributing.md): Update to match your module's contributing guidelines, or remove it.
@@ -137,7 +137,7 @@ The following boilerplate git repository files should be reviewed and updated or
 >
 > You may delete this message and all of the file's content above it and commit any changes you've made.
 
-# GitBatch PowerShell Module
+# GitClean PowerShell Module
 
 ## 💬 Description
 

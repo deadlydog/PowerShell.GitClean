@@ -1,4 +1,4 @@
-using module '.\GitBatch.psm1'
+using module '.\GitClean.psm1'
 
 # UPDATE ME: This is just example code. Replace the code below with your module's tests.
 Describe 'Get-HelloWorld' {

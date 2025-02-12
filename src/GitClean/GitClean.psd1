@@ -3,7 +3,7 @@
 @{
 
   # Script module or binary module file associated with this manifest.
-  RootModule = 'GitBatch.psm1'
+  RootModule = 'GitClean.psm1'
 
   # Version number of this module.
   ModuleVersion = '0.0.0'
@@ -64,7 +64,7 @@
 
   # Functions to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no functions to export.
   FunctionsToExport = @(
-    'Get-HelloWorld'
+    'Clean-GitRepositories'
   )
 
   # Cmdlets to export from this module, for best performance, do not use wildcards and do not delete the entry, use an empty array if there are no cmdlets to export.
@@ -94,10 +94,10 @@
       Tags = @('Git', 'Batch', 'Repository', 'Repositories', 'Clean', 'Pull')
 
       # A URL to the license for this module.
-      LicenseUri = 'https://github.com/deadlydog/PowerShell.GitBatch/blob/main/License.md'
+      LicenseUri = 'https://github.com/deadlydog/PowerShell.GitClean/blob/main/License.md'
 
       # A URL to the main website for this project.
-      ProjectUri = 'https://github.com/deadlydog/PowerShell.GitBatch'
+      ProjectUri = 'https://github.com/deadlydog/PowerShell.GitClean'
 
       # A URL to an icon representing this module.
       # IconUri = ''

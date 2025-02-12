@@ -37,8 +37,8 @@ on:
         value: ${{ jobs.build-and-test.outputs.deployFilesArtifactName }}
 
 env:
-  powerShellModuleName: 'GitBatch'
-  powerShellModuleDirectoryPath: './src/GitBatch'
+  powerShellModuleName: 'GitClean'
+  powerShellModuleDirectoryPath: './src/GitClean'
   deployFilesDirectoryPath: './deploy'
   moduleArtifactName: 'ModuleArtifact'
   moduleArtifactDirectoryPath: './artifacts/Module'
