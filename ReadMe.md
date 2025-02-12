@@ -64,6 +64,7 @@ It accepts the following parameters:
 - `DirectorySearchDepth`: The depth to search for git repositories under the RootDirectoryPath. A large value may increase the time it takes to discover git repositories. Default is 4. Alias: `Depth`
 - `Force`: If specified, the cmdlet will clean all repositories, even if they have untracked files. __Be careful with this option!__
 - `WhatIf`: If specified, the cmdlet will not actually delete any files. It will only show you which repos would be cleaned, even if `-Force` is specified.
+- `Confirm`: If specified, the cmdlet will prompt you to confirm before cleaning each repository.
 
 ### Examples
 
