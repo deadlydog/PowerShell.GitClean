@@ -70,7 +70,7 @@ function Clean-GitRepository([string] $gitRepositoryDirectoryPath, [bool] $whatI
 	Set-Location -Path $gitRepositoryDirectoryPath
 
 	if ($whatIf) {
-		Write-Information "What If is enabled, so not cleaning git repository at '$gitRepositoryDirectoryPath'."
+		Write-Host "What If is enabled, so not cleaning git repository at '$gitRepositoryDirectoryPath'."
 	} else {
 		Invoke-Expression "git -C ""$gitRepositoryDirectoryPath"" clean -xdf" > $null
 	}

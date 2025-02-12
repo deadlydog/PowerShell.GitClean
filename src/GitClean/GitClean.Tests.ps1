@@ -69,6 +69,18 @@ Describe 'Clean-GitRepositories' {
 			$untrackedFileExists = Test-Path -Path $Repo1UntrackedFilePath
 			$untrackedFileExists | Should -Be $false
 		}
+
+		It 'Should not clean the git repository if the WhatIf switch is provided' {
+			# Arrange.
+			CreateGitRepository -directoryPath $Repo1Path -hasUntrackedFile
+
+			# Act.
+			Clean-GitRepositories -RootDirectoryPath $RootDirectoryPath -Force -WhatIf
+
+			# Assert.
+			$untrackedFileExists = Test-Path -Path $Repo1UntrackedFilePath
+			$untrackedFileExists | Should -Be $true
+		}
 	}
 
 	Context 'There are 3 git repositories' {
