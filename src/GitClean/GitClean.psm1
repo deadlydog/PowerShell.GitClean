@@ -64,10 +64,7 @@ function Clean-GitRepositories {
 		[int] $DirectorySearchDepth = 4,
 
 		[Parameter(Mandatory = $false, HelpMessage = 'If provided all git repositories will be cleaned, even if they have untracked files.')]
-		[switch] $Force = $false,
-
-		[Parameter(Mandatory = $false, HelpMessage = 'If provided no git repositories will be cleaned; it will just show which repos would be cleaned.')]
-		[switch] $WhatIf = $false
+		[switch] $Force = $false
 	)
 
 	Write-Information "Searching for git repositories in '$RootDirectoryPath'..."
@@ -91,7 +88,7 @@ function Clean-GitRepositories {
 	ForEach-WithProgress -collection $gitRepositoryDirectoryPathsThatAreSafeToClean -scriptBlock {
 		param([string] $gitRepoDirectoryPath)
 
-		Clean-GitRepository -gitRepositoryDirectoryPath $gitRepoDirectoryPath -WhatIf $WhatIf
+		Clean-GitRepository -gitRepositoryDirectoryPath $gitRepoDirectoryPath
 	} -activity "Cleaning git repositories" -status "Cleaning git repo '{0}'"
 
 	if ($gitRepositoryDirectoryPathsWithUntrackedFiles.Count -gt 0) {
@@ -119,13 +116,14 @@ function Test-GitRepositoryHasUntrackedFiles([string] $gitRepositoryDirectoryPat
 	return $gitRepoHasUntrackedFiles
 }
 
-function Clean-GitRepository([string] $gitRepositoryDirectoryPath, [bool] $whatIf) {
+function Clean-GitRepository {
+	[CmdletBinding(SupportsShouldProcess)]
+	param([string] $gitRepositoryDirectoryPath)
+
 	Write-Verbose "Cleaning git repository at '$gitRepositoryDirectoryPath' using 'git clean -xfd'."
 	Set-Location -Path $gitRepositoryDirectoryPath
 
-	if ($whatIf) {
-		Write-Host "What If is enabled, so not cleaning git repository at '$gitRepositoryDirectoryPath'."
-	} else {
+	if ($PSCmdlet.ShouldProcess($gitRepositoryDirectoryPath, 'git clean -xfd')) {
 		& git -C "$gitRepositoryDirectoryPath" clean -xdf > $null
 	}
 }
