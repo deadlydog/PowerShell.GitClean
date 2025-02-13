@@ -51,7 +51,7 @@ function Clean-GitRepositories {
 		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files, searching up to 2 child directories deep.
 
 	.EXAMPLE
-		PS> Clean-GitRepositories -RootDirectoryPath 'C:\GitRepos' -Information -Verbose
+		PS> Clean-GitRepositories -RootDirectoryPath 'C:\GitRepos' -InformationAction Continue -Verbose
 
 		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files, showing information messages and verbose output.
 

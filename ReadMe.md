@@ -132,7 +132,7 @@ Clean-GitRepositories -Path 'C:\path\to\repositories' -Depth 1
 Show general and verbose information about what the cmdlet is doing:
 
 ```powershell
-Clean-GitRepositories -Path 'C:\path\to\repositories' -Information -Verbose
+Clean-GitRepositories -Path 'C:\path\to\repositories' -InformationAction Continue -Verbose
 ```
 
 ## ➕ How to contribute
