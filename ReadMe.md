@@ -82,7 +82,7 @@ The cmdlet returns a PSCustomObject with the following properties:
 - `GitRepositoriesCleaned`: Array of the git repository directory paths that were cleaned.
 - `GitRepositoriesWithUntrackedFiles`: Array of the git repository directory paths that were not cleaned due to having untracked files.
 - `Duration`: How long the operation took to complete.
-- `DiskSpaceReclaimed`: The amount of disk space that was reclaimed by the git clean operations. -1 if `CalculateDiskSpaceReclaimed` was not provided.
+- `DiskSpaceReclaimedInMb`: The amount of disk space in megabytes that was reclaimed by the git clean operations. -1 if `CalculateDiskSpaceReclaimed` was not provided.
 
 ### Examples
 
