@@ -173,9 +173,10 @@ function CleanGitRepository {
 	if ($PSCmdlet.ShouldProcess($gitRepositoryDirectoryPath, 'git clean -xfd')) {
 		[long] $repoSizeBeforeCleaning = 0
 		if ($calculateDiskSpaceReclaimed) {
+			# Use System.IO.DirectoryInfo instead of Get-ChildItem for performance reasons.
 			Write-Verbose "Calculating size of '$gitRepositoryDirectoryPath' before cleaning."
-			$repoSizeBeforeCleaning = Get-ChildItem -Path $gitRepositoryDirectoryPath -Recurse -Force |
-				Measure-Object -Property Length -Sum | Select-Object -ExpandProperty Sum
+			$repoSizeBeforeCleaning = [System.IO.DirectoryInfo]::new($gitRepositoryDirectoryPath).GetFiles('*', 'AllDirectories') |
+				ForEach-Object { $_.Length } | Measure-Object -Sum | Select-Object -ExpandProperty Sum
 		}
 
 		Write-Verbose "Cleaning git repository at '$gitRepositoryDirectoryPath' using 'git clean -xfd'."
@@ -184,9 +185,10 @@ function CleanGitRepository {
 
 		[long] $repoSizeAfterCleaning = 0
 		if ($calculateDiskSpaceReclaimed) {
+			# Use System.IO.DirectoryInfo instead of Get-ChildItem for performance reasons.
 			Write-Verbose "Calculating size of '$gitRepositoryDirectoryPath' after cleaning."
-			$repoSizeAfterCleaning = Get-ChildItem -Path $gitRepositoryDirectoryPath -Recurse -Force |
-				Measure-Object -Property Length -Sum | Select-Object -ExpandProperty Sum
+			$repoSizeAfterCleaning = [System.IO.DirectoryInfo]::new($gitRepositoryDirectoryPath).GetFiles('*', 'AllDirectories') |
+				ForEach-Object { $_.Length } | Measure-Object -Sum | Select-Object -ExpandProperty Sum
 		}
 
 		$diskSpaceReclaimed = $repoSizeBeforeCleaning - $repoSizeAfterCleaning
