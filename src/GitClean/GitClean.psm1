@@ -169,6 +169,7 @@ function CleanGitRepository {
 	[CmdletBinding(SupportsShouldProcess)]
 	param([string] $gitRepositoryDirectoryPath, [bool] $calculateDiskSpaceReclaimed)
 
+	[long] $diskSpaceReclaimed = 0
 	if ($PSCmdlet.ShouldProcess($gitRepositoryDirectoryPath, 'git clean -xfd')) {
 		[long] $repoSizeBeforeCleaning = 0
 		if ($calculateDiskSpaceReclaimed) {
@@ -187,11 +188,13 @@ function CleanGitRepository {
 			$repoSizeAfterCleaning = Get-ChildItem -Path $gitRepositoryDirectoryPath -Recurse -Force |
 				Measure-Object -Property Length -Sum | Select-Object -ExpandProperty Sum
 		}
-		Write-Verbose '----------'
 
-		[long] $diskSpaceReclaimed = $repoSizeBeforeCleaning - $repoSizeAfterCleaning
-		return $diskSpaceReclaimed
+		$diskSpaceReclaimed = $repoSizeBeforeCleaning - $repoSizeAfterCleaning
+		Write-Verbose "Disk space reclaimed: $diskSpaceReclaimed bytes"
+		Write-Verbose '----------'
 	}
+
+	return $diskSpaceReclaimed
 }
 
 # Adding all the code inline to support Write-Progress made things feel very messy.
