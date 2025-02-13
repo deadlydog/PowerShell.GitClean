@@ -166,12 +166,62 @@ Describe 'Invoke-GitClean' {
 			Invoke-GitClean -RootDirectoryPath $RootDirectoryPath
 
 			# Assert.
-			$untrackedFileExists1 = Test-Path -Path $Repo1UntrackedFilePath
-			$untrackedFileExists2 = Test-Path -Path $Repo2UntrackedFilePath
-			$untrackedFileExists3 = Test-Path -Path $Repo3UntrackedFilePath
-			$untrackedFileExists1 | Should -Be $false
-			$untrackedFileExists2 | Should -Be $true
-			$untrackedFileExists3 | Should -Be $false
+			$repo1UntrackedFileExists = Test-Path -Path $Repo1UntrackedFilePath
+			$repo2UntrackedFileExists = Test-Path -Path $Repo2UntrackedFilePath
+			$repo3UntrackedFileExists = Test-Path -Path $Repo3UntrackedFilePath
+			$repo1UntrackedFileExists | Should -Be $false
+			$repo2UntrackedFileExists | Should -Be $true
+			$repo3UntrackedFileExists | Should -Be $false
+		}
+	}
+
+	Context 'There are 5 git repositories, each one directory deeper than the previous' {
+		BeforeEach {
+			$RootDirectoryPath = NewRandomRootDirectoryPath
+			$Repo1Path = NewRandomDirectoryPath -rootDirectoryPath "$RootDirectoryPath"
+			$Repo2Path = NewRandomDirectoryPath -rootDirectoryPath "$RootDirectoryPath\Level2"
+			$Repo3Path = NewRandomDirectoryPath -rootDirectoryPath "$RootDirectoryPath\Level2\Level3"
+			$Repo4Path = NewRandomDirectoryPath -rootDirectoryPath "$RootDirectoryPath\Level2\Level3\Level4"
+			$Repo5Path = NewRandomDirectoryPath -rootDirectoryPath "$RootDirectoryPath\Level2\Level3\Level4\Level5"
+
+			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'Used in the It blocks')]
+			$Repo1UntrackedFilePath = Join-Path -Path $Repo1Path -ChildPath $UntrackedFileName
+			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'Used in the It blocks')]
+			$Repo2UntrackedFilePath = Join-Path -Path $Repo2Path -ChildPath $UntrackedFileName
+			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'Used in the It blocks')]
+			$Repo3UntrackedFilePath = Join-Path -Path $Repo3Path -ChildPath $UntrackedFileName
+			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'Used in the It blocks')]
+			$Repo4UntrackedFilePath = Join-Path -Path $Repo4Path -ChildPath $UntrackedFileName
+			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'Used in the It blocks')]
+			$Repo5UntrackedFilePath = Join-Path -Path $Repo5Path -ChildPath $UntrackedFileName
+		}
+
+		It 'Should only find and clean the git repositories up to the specified depth' {
+			# Arrange.
+			# We assume a depth of 2 for this test.
+			CreateGitRepository -directoryPath $Repo1Path -hasUntrackedFile
+			CreateGitRepository -directoryPath $Repo2Path -hasUntrackedFile
+			CreateGitRepository -directoryPath $Repo3Path -hasUntrackedFile
+			CreateGitRepository -directoryPath $Repo4Path -hasUntrackedFile
+			CreateGitRepository -directoryPath $Repo5Path -hasUntrackedFile
+
+			# Act.
+			$result = Invoke-GitClean -RootDirectoryPath $RootDirectoryPath -Depth 2 -Force -CalculateDiskSpaceReclaimed
+
+			# Assert.
+			$repo1UntrackedFileExists = Test-Path -Path $Repo1UntrackedFilePath
+			$repo2UntrackedFileExists = Test-Path -Path $Repo2UntrackedFilePath
+			$repo3UntrackedFileExists = Test-Path -Path $Repo3UntrackedFilePath
+			$repo4UntrackedFileExists = Test-Path -Path $Repo4UntrackedFilePath
+			$repo5UntrackedFileExists = Test-Path -Path $Repo5UntrackedFilePath
+			$repo1UntrackedFileExists | Should -Be $false
+			$repo2UntrackedFileExists | Should -Be $false
+			$repo3UntrackedFileExists | Should -Be $true
+			$repo4UntrackedFileExists | Should -Be $true
+			$repo5UntrackedFileExists | Should -Be $true
+
+			$result.NumberOfGitRepositoriesFound | Should -Be 2
+			$result.DiskSpaceReclaimedInMb | Should -Be (($UntrackedFileSizeInBytes / 1MB) * 2)
 		}
 	}
 }
