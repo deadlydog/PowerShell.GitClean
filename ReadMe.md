@@ -63,14 +63,15 @@ It accepts the following parameters:
 
 - `RootDirectoryPath` (required): A directory path that all of your git repositories are located under. Alias: `Path`
 - `DirectorySearchDepth`: The depth to search for git repositories under the `RootDirectoryPath`. A large value may increase the time it takes to discover git repositories. Default is 3. Alias: `Depth`
-- `Force`: If specified, the cmdlet will clean all repositories, even if they have untracked files. __Be careful with this option!__
+- `CalculateDiskSpaceReclaimed`: If provided, the amount of disk space reclaimed by the git clean operations will be reported in the output. This will increase the time it takes to perform the operation.
+- `Force`: If provided, the cmdlet will clean all repositories, even if they have untracked files. __Be careful with this option!__
 
 The following common parameters are also supported:
 
-- `WhatIf`: If specified, the cmdlet will not actually delete any files. It will only show you which repos would be cleaned, even if `-Force` is specified.
-- `Confirm`: If specified, the cmdlet will prompt you to confirm before cleaning each repository.
-- `Information`: If specified, the cmdlet will output general information about what it is doing.
-- `Verbose`: If specified, the cmdlet will output verbose information about what it is doing.
+- `WhatIf`: If provided, the cmdlet will not actually delete any files. It will only show you which repos would be cleaned, even if `-Force` is provided.
+- `Confirm`: If provided, the cmdlet will prompt you to confirm before cleaning each repository.
+- `Information`: If provided, the cmdlet will output general information about what it is doing.
+- `Verbose`: If provided, the cmdlet will output verbose information about what it is doing.
 
 The cmdlet returns a PSCustomObject with the following properties:
 
@@ -126,6 +127,16 @@ And to only clean `repo1`, `repo2`, `repo3`, and `repo4`:
 ```powershell
 Clean-GitRepositories -Path 'C:\path\to\repositories' -Depth 1
 ```
+
+---
+
+Clean all git repositories under the current directory and show how much disk space was reclaimed in the output:
+
+```powershell
+Clean-GitRepositories -RootDirectoryPath 'C:\path\to\repositories' -CalculateDiskSpaceReclaimed
+```
+
+NOTE: Calculating the disk space reclaimed will increase the time it takes to perform the operation, as the git directories will be scanned before and after the clean operation to determine how much disk space was reclaimed.
 
 ---
 

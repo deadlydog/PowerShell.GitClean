@@ -6,6 +6,7 @@
 Describe 'Clean-GitRepositories' {
 	BeforeAll {
 		[string] $UntrackedFileName = 'UntrackedFile.txt'
+		[int] $UntrackedFileSizeInBytes = 1MB
 
 		function NewRandomRootDirectoryPath() {
 			[string] $rootDirectoryPath = "$TestDrive\" + ([System.IO.Path]::GetRandomFileName().Split('.')[0])
@@ -24,7 +25,11 @@ Describe 'Clean-GitRepositories' {
 			& git -C "$directoryPath" init > $null
 
 			if ($hasUntrackedFile) {
-				New-Item -Path (Join-Path -Path $directoryPath -ChildPath $UntrackedFileName) -ItemType File > $null
+				$untrackedFilePath = Join-Path -Path $directoryPath -ChildPath $UntrackedFileName
+
+				$tempFile = [System.IO.FileStream]::new($untrackedFilePath, [System.IO.FileMode]::Create, [System.IO.FileAccess]::ReadWrite)
+				$tempFile.SetLength($UntrackedFileSizeInBytes)
+				$tempFile.Close()
 			}
 		}
 	}
@@ -110,6 +115,18 @@ Describe 'Clean-GitRepositories' {
 			$result.NumberOfGitRepositoriesFound | Should -Be 1
 			$result.GitRepositoriesCleaned | Should -BeNullOrEmpty
 			$result.GitRepositoriesWithUntrackedFiles[0] | Should -Be $Repo1Path
+		}
+
+		It 'Should report the correct disk space reclaimed when the switch is provided' {
+			# Arrange.
+			CreateGitRepository -directoryPath $Repo1Path -hasUntrackedFile
+
+			# Act.
+			# Use -Force to ensure the untracked files are deleted and reported on.
+			$result = Clean-GitRepositories -RootDirectoryPath $RootDirectoryPath -Force -CalculateDiskSpaceReclaimed
+
+			# Assert.
+			$result.DiskSpaceReclaimedInMb | Should -Be ($UntrackedFileSizeInBytes / 1MB)
 		}
 	}
 
