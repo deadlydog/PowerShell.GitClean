@@ -3,7 +3,7 @@
 # Because these are called by the smoke tests, make sure they only call public module functions and do not use mocks.
 # These are integration tests that assume git.exe is installed and available in the PATH environment variable.
 
-Describe 'Clean-GitRepositories' {
+Describe 'Invoke-GitClean' {
 	BeforeAll {
 		[string] $UntrackedFileName = 'UntrackedFile.txt'
 		[int] $UntrackedFileSizeInBytes = 1MB
@@ -48,7 +48,7 @@ Describe 'Clean-GitRepositories' {
 			CreateGitRepository -directoryPath $Repo1Path
 
 			# Act.
-			Clean-GitRepositories -RootDirectoryPath $RootDirectoryPath
+			Invoke-GitClean -RootDirectoryPath $RootDirectoryPath
 
 			# Assert.
 			$untrackedFileExists = Test-Path -Path $Repo1UntrackedFilePath
@@ -60,7 +60,7 @@ Describe 'Clean-GitRepositories' {
 			CreateGitRepository -directoryPath $Repo1Path -hasUntrackedFile
 
 			# Act.
-			Clean-GitRepositories -RootDirectoryPath $RootDirectoryPath
+			Invoke-GitClean -RootDirectoryPath $RootDirectoryPath
 
 			# Assert.
 			$untrackedFileExists = Test-Path -Path $Repo1UntrackedFilePath
@@ -72,7 +72,7 @@ Describe 'Clean-GitRepositories' {
 			CreateGitRepository -directoryPath $Repo1Path -hasUntrackedFile
 
 			# Act.
-			Clean-GitRepositories -RootDirectoryPath $RootDirectoryPath -Force
+			Invoke-GitClean -RootDirectoryPath $RootDirectoryPath -Force
 
 			# Assert.
 			$untrackedFileExists = Test-Path -Path $Repo1UntrackedFilePath
@@ -84,7 +84,7 @@ Describe 'Clean-GitRepositories' {
 			CreateGitRepository -directoryPath $Repo1Path -hasUntrackedFile
 
 			# Act.
-			Clean-GitRepositories -RootDirectoryPath $RootDirectoryPath -Force -WhatIf
+			Invoke-GitClean -RootDirectoryPath $RootDirectoryPath -Force -WhatIf
 
 			# Assert.
 			$untrackedFileExists = Test-Path -Path $Repo1UntrackedFilePath
@@ -96,7 +96,7 @@ Describe 'Clean-GitRepositories' {
 			CreateGitRepository -directoryPath $Repo1Path
 
 			# Act.
-			$result = Clean-GitRepositories -RootDirectoryPath $RootDirectoryPath
+			$result = Invoke-GitClean -RootDirectoryPath $RootDirectoryPath
 
 			# Assert.
 			$result.NumberOfGitRepositoriesFound | Should -Be 1
@@ -109,7 +109,7 @@ Describe 'Clean-GitRepositories' {
 			CreateGitRepository -directoryPath $Repo1Path -hasUntrackedFile
 
 			# Act.
-			$result = Clean-GitRepositories -RootDirectoryPath $RootDirectoryPath
+			$result = Invoke-GitClean -RootDirectoryPath $RootDirectoryPath
 
 			# Assert.
 			$result.NumberOfGitRepositoriesFound | Should -Be 1
@@ -123,7 +123,7 @@ Describe 'Clean-GitRepositories' {
 
 			# Act.
 			# Use -Force to ensure the untracked files are deleted and reported on.
-			$result = Clean-GitRepositories -RootDirectoryPath $RootDirectoryPath -Force -CalculateDiskSpaceReclaimed
+			$result = Invoke-GitClean -RootDirectoryPath $RootDirectoryPath -Force -CalculateDiskSpaceReclaimed
 
 			# Assert.
 			$result.DiskSpaceReclaimedInMb | Should -Be ($UntrackedFileSizeInBytes / 1MB)
@@ -152,7 +152,7 @@ Describe 'Clean-GitRepositories' {
 			CreateGitRepository -directoryPath $Repo3Path
 
 			# Act.
-			Clean-GitRepositories -RootDirectoryPath $RootDirectoryPath
+			Invoke-GitClean -RootDirectoryPath $RootDirectoryPath
 
 			# Assert.
 			$untrackedFileExists1 = Test-Path -Path $Repo1UntrackedFilePath

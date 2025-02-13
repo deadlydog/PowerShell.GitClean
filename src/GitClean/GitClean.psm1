@@ -1,4 +1,4 @@
-function Clean-GitRepositories {
+function Invoke-GitClean {
 	<#
 	.SYNOPSIS
 		Cleans all git repositories under a directory.
@@ -29,47 +29,45 @@ function Clean-GitRepositories {
 		Prompts the user to confirm before cleaning each git repository.
 
 	.EXAMPLE
-		PS> Clean-GitRepositories -RootDirectoryPath 'C:\GitRepos'
+		PS> Invoke-GitClean -RootDirectoryPath 'C:\GitRepos'
 
 		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files.
 
 	.EXAMPLE
-		PS> Clean-GitRepositories -RootDirectoryPath 'C:\GitRepos' -Force
+		PS> Invoke-GitClean -RootDirectoryPath 'C:\GitRepos' -Force
 
 		Cleans all git repositories under 'C:\GitRepos', even if they have untracked files.
 
 	.EXAMPLE
-		PS> Clean-GitRepositories -RootDirectoryPath 'C:\GitRepos' -WhatIf
+		PS> Invoke-GitClean -RootDirectoryPath 'C:\GitRepos' -WhatIf
 
 		Shows which git repositories under 'C:\GitRepos' would be cleaned, but does not actually clean them.
 
 	.EXAMPLE
-		PS> Clean-GitRepositories -RootDirectoryPath 'C:\GitRepos' -Confirm
+		PS> Invoke-GitClean -RootDirectoryPath 'C:\GitRepos' -Confirm
 
 		Prompts the user to confirm before cleaning each git repository.
 
 	.EXAMPLE
-		PS> Clean-GitRepositories -RootDirectoryPath 'C:\GitRepos' -DirectorySearchDepth 2
+		PS> Invoke-GitClean -RootDirectoryPath 'C:\GitRepos' -DirectorySearchDepth 2
 
 		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files, searching up to 2 child directories deep.
 
 	.EXAMPLE
-		PS> Clean-GitRepositories -RootDirectoryPath 'C:\GitRepos' -CalculateDiskSpaceReclaimed
+		PS> Invoke-GitClean -RootDirectoryPath 'C:\GitRepos' -CalculateDiskSpaceReclaimed
 
 		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files, showing the amount of disk space reclaimed.
 
 		NOTE: Calculating the disk space reclaimed will increase the time it takes to perform the operation, as the git directories will be scanned before and after the clean operation to determine how much disk space was reclaimed.
 
 	.EXAMPLE
-		PS> Clean-GitRepositories -RootDirectoryPath 'C:\GitRepos' -InformationAction Continue -Verbose
+		PS> Invoke-GitClean -RootDirectoryPath 'C:\GitRepos' -InformationAction Continue -Verbose
 
 		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files, showing information messages and verbose output.
 
 	.LINK
 		https://github.com/deadlydog/PowerShell.GitClean
 	#>
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseApprovedVerbs', '', Justification = 'Using Git terminology')]
-	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseSingularNouns', '', Justification = 'Using Git terminology')]
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Force', Justification = 'Used in a child scope')]
 	[CmdletBinding(SupportsShouldProcess)]
 	param (

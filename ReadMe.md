@@ -22,7 +22,7 @@
 
 ## 💬 Description
 
-GitClean is a cross-platform PowerShell module that provides a `Clean-GitRepositories` cmdlet to easily perform a [git clean -xfd](https://git-scm.com/docs/git-clean) on all git repositories under a specified directory.
+GitClean is a cross-platform PowerShell module that provides an `Invoke-GitClean` cmdlet to easily perform a [git clean -xfd](https://git-scm.com/docs/git-clean) on all git repositories under a specified directory.
 
 ## ❓ Why this exists
 
@@ -46,7 +46,7 @@ Install-Module -Name GitClean -Scope CurrentUser
 To clean all git repositories under a specified directory, run the following command:
 
 ```powershell
-Clean-GitRepositories -RootDirectoryPath 'C:\path\to\repositories'
+Invoke-GitClean -RootDirectoryPath 'C:\path\to\repositories'
 ```
 
 This assumes that there are multiple git repositories under the specified root directory.
@@ -57,7 +57,7 @@ This assumes that there are multiple git repositories under the specified root d
 
 ## 📖 Usage
 
-This module only provides one cmdlet: `Clean-GitRepositories`
+This module only provides one cmdlet: `Invoke-GitClean`
 
 It accepts the following parameters:
 
@@ -89,7 +89,7 @@ The cmdlet returns a PSCustomObject with the following properties:
 Clean all git repositories under the current directory:
 
 ```powershell
-Clean-GitRepositories -RootDirectoryPath (Get-Location)
+Invoke-GitClean -RootDirectoryPath (Get-Location)
 ```
 
 ---
@@ -97,7 +97,7 @@ Clean-GitRepositories -RootDirectoryPath (Get-Location)
 Do not clean any repositories, but show which ones would be cleaned:
 
 ```powershell
-Clean-GitRepositories -Path 'C:\path\to\repositories' -WhatIf
+Invoke-GitClean -Path 'C:\path\to\repositories' -WhatIf
 ```
 
 ---
@@ -105,7 +105,7 @@ Clean-GitRepositories -Path 'C:\path\to\repositories' -WhatIf
 Clean all repositories, even if they have untracked files:
 
 ```powershell
-Clean-GitRepositories -Path 'C:\path\to\repositories' -Force
+Invoke-GitClean -Path 'C:\path\to\repositories' -Force
 ```
 
 ---
@@ -121,13 +121,13 @@ With repositories at the following paths:
 Only clean `repo1` and `repo2`:
 
 ```powershell
-Clean-GitRepositories -Path 'C:\path\to\repositories' -Depth 0
+Invoke-GitClean -Path 'C:\path\to\repositories' -Depth 0
 ```
 
 And to only clean `repo1`, `repo2`, `repo3`, and `repo4`:
 
 ```powershell
-Clean-GitRepositories -Path 'C:\path\to\repositories' -Depth 1
+Invoke-GitClean -Path 'C:\path\to\repositories' -Depth 1
 ```
 
 ---
@@ -135,7 +135,7 @@ Clean-GitRepositories -Path 'C:\path\to\repositories' -Depth 1
 Clean all git repositories under the current directory and show how much disk space was reclaimed in the output:
 
 ```powershell
-Clean-GitRepositories -RootDirectoryPath 'C:\path\to\repositories' -CalculateDiskSpaceReclaimed
+Invoke-GitClean -RootDirectoryPath 'C:\path\to\repositories' -CalculateDiskSpaceReclaimed
 ```
 
 NOTE: Calculating the disk space reclaimed will increase the time it takes to perform the operation, as the git directories will be scanned before and after the clean operation to determine how much disk space was reclaimed.
@@ -145,7 +145,7 @@ NOTE: Calculating the disk space reclaimed will increase the time it takes to pe
 Show general and verbose information about what the cmdlet is doing:
 
 ```powershell
-Clean-GitRepositories -Path 'C:\path\to\repositories' -InformationAction Continue -Verbose
+Invoke-GitClean -Path 'C:\path\to\repositories' -InformationAction Continue -Verbose
 ```
 
 ## ➕ How to contribute
