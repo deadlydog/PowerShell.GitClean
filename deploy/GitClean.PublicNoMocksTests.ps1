@@ -6,7 +6,7 @@
 Describe 'Invoke-GitClean' {
 	BeforeAll {
 		[string] $UntrackedFileName = 'UntrackedFile.txt'
-		[int] $UntrackedFileSizeInBytes = 1MB
+		[int] $UntrackedFileSizeInBytes = 1MB # Output is reported in MB, so 1MB is the minimum size to test with.
 
 		function NewRandomRootDirectoryPath() {
 			[string] $rootDirectoryPath = "$TestDrive\" + ([System.IO.Path]::GetRandomFileName().Split('.')[0])
