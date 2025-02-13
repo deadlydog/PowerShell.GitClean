@@ -24,6 +24,7 @@
 		"CODEOWNERS", // GitHub CODEOWNERS
 		"Codespace", // GitHub Codespaces
 		"Codespaces", // GitHub Codespaces
+		"deadlydog", // GitHub username
 		"devcontainer", // VS Code devcontainer
 		"devcontainers", // VS Code devcontainers
 		"gittools", // GitHub action author
