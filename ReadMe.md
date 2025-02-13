@@ -22,14 +22,14 @@
 
 ## 💬 Description
 
-The GitClean PowerShell module provides a `Clean-GitRepositories` cmdlet that can be used to easily perform a `git clean -xfd` on all git repositories under a specified directory.
+GitClean is a cross-platform PowerShell module that provides a `Clean-GitRepositories` cmdlet to easily perform a `git clean -xfd` on all git repositories under a specified directory.
 
 ## ❓ Why this exists
 
 Developers often have 10s or 100s of git repositories cloned on their local machine.
 We don't always remember to clean up build artifacts and temporary files, such as NuGet packages and node_modules, when we are done.
 These files can take up a lot of space on your hard drive.
-This module provides a simple way to clean up all of these git repositories at once.
+This module provides a simple way to clean up all of your git repositories at once, potentially allowing you to reclaim many GBs of disk space.
 
 ## 🖼️ Screenshots
 
@@ -51,8 +51,9 @@ Clean-GitRepositories -RootDirectoryPath 'C:\path\to\repositories'
 
 This assumes that there are multiple git repositories under the specified root directory.
 
-__Safety first__: To avoid accidentally deleting files that have not yet been committed to git, this cmdlet will only clean repositories that have no untracked files.
-This ensures you don't lose any work that you haven't committed yet.
+> [!NOTE]
+> __GitClean puts safety first:__ To avoid accidentally deleting files that have not yet been committed to git, this cmdlet will only clean repositories that have no untracked files.
+> This ensures you don't lose any work that you haven't committed yet.
 
 ## 📖 Usage
 
@@ -60,14 +61,25 @@ This module only provides one cmdlet: `Clean-GitRepositories`
 
 It accepts the following parameters:
 
-- `RootDirectoryPath` (required): The root directory where all of your git repositories are located. Alias: `Path`
-- `DirectorySearchDepth`: The depth to search for git repositories under the RootDirectoryPath. A large value may increase the time it takes to discover git repositories. Default is 3. Alias: `Depth`
+- `RootDirectoryPath` (required): A directory path that all of your git repositories are located under. Alias: `Path`
+- `DirectorySearchDepth`: The depth to search for git repositories under the `RootDirectoryPath`. A large value may increase the time it takes to discover git repositories. Default is 3. Alias: `Depth`
 - `Force`: If specified, the cmdlet will clean all repositories, even if they have untracked files. __Be careful with this option!__
-- Common parameters supported:
-  - `WhatIf`: If specified, the cmdlet will not actually delete any files. It will only show you which repos would be cleaned, even if `-Force` is specified.
-  - `Confirm`: If specified, the cmdlet will prompt you to confirm before cleaning each repository.
-  - `Information`: If specified, the cmdlet will output general information about what it is doing.
-  - `Verbose`: If specified, the cmdlet will output verbose information about what it is doing.
+
+The following common parameters are also supported:
+
+- `WhatIf`: If specified, the cmdlet will not actually delete any files. It will only show you which repos would be cleaned, even if `-Force` is specified.
+- `Confirm`: If specified, the cmdlet will prompt you to confirm before cleaning each repository.
+- `Information`: If specified, the cmdlet will output general information about what it is doing.
+- `Verbose`: If specified, the cmdlet will output verbose information about what it is doing.
+
+The cmdlet returns a PSCustomObject with the following properties:
+
+- `RepositoryPath`: Path that was used to run the command.
+- `DirectorySearchDepth`: Depth that was used to run the command.
+- `NumberOfGitRepositoriesFound`: Number of git repositories that were found.
+- `GitRepositoriesCleaned`: Array of the git repository directory paths that were cleaned.
+- `GitRepositoriesWithUntrackedFiles`: Array of the git repository directory paths that were not cleaned due to having untracked files.
+- `Duration`: How long the operation took to complete.
 
 ### Examples
 
