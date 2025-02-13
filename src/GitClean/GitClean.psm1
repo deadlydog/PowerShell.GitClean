@@ -102,8 +102,8 @@ function Clean-GitRepositories {
 	} -activity "Cleaning git repositories" -status "Cleaning git repo '{0}'"
 
 	if ($gitRepositoryDirectoryPathsWithUntrackedFiles.Count -gt 0) {
-		Write-Information "The following git repo directories have untracked files, so they were not cleaned: " +
-			($gitRepositoryDirectoryPathsWithUntrackedFiles -join [System.Environment]::NewLine)
+		Write-Information ("The following git repo directories have untracked files, so they were not cleaned: " +
+			($gitRepositoryDirectoryPathsWithUntrackedFiles -join [System.Environment]::NewLine))
 	}
 
 	[DateTime] $finishTime = Get-Date

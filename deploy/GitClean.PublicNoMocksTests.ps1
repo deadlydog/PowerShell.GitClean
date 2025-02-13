@@ -85,6 +85,32 @@ Describe 'Clean-GitRepositories' {
 			$untrackedFileExists = Test-Path -Path $Repo1UntrackedFilePath
 			$untrackedFileExists | Should -Be $true
 		}
+
+		It 'Should return that 1 git repository was cleaned when there are no untracked files' {
+			# Arrange.
+			CreateGitRepository -directoryPath $Repo1Path
+
+			# Act.
+			$result = Clean-GitRepositories -RootDirectoryPath $RootDirectoryPath
+
+			# Assert.
+			$result.NumberOfGitRepositoriesFound | Should -Be 1
+			$result.GitRepositoriesCleaned[0] | Should -Be $Repo1Path
+			$result.GitRepositoriesWithUntrackedFiles | Should -BeNullOrEmpty
+		}
+
+		It 'Should return that 0 git repositories were cleaned when there are untracked files' {
+			# Arrange.
+			CreateGitRepository -directoryPath $Repo1Path -hasUntrackedFile
+
+			# Act.
+			$result = Clean-GitRepositories -RootDirectoryPath $RootDirectoryPath
+
+			# Assert.
+			$result.NumberOfGitRepositoriesFound | Should -Be 1
+			$result.GitRepositoriesCleaned | Should -BeNullOrEmpty
+			$result.GitRepositoriesWithUntrackedFiles[0] | Should -Be $Repo1Path
+		}
 	}
 
 	Context 'There are 3 git repositories' {
