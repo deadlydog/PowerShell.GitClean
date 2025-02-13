@@ -22,7 +22,7 @@
 
 ## 💬 Description
 
-GitClean is a cross-platform PowerShell module that provides a `Clean-GitRepositories` cmdlet to easily perform a `git clean -xfd` on all git repositories under a specified directory.
+GitClean is a cross-platform PowerShell module that provides a `Clean-GitRepositories` cmdlet to easily perform a [git clean -xfd](https://git-scm.com/docs/git-clean) on all git repositories under a specified directory.
 
 ## ❓ Why this exists
 
