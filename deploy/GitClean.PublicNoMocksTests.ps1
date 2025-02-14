@@ -34,6 +34,22 @@ Describe 'Invoke-GitClean' {
 		}
 	}
 
+	Context 'There are no git repositories' {
+		BeforeEach {
+			$RootDirectoryPath = NewRandomRootDirectoryPath
+		}
+
+		It 'Should not find any git repositories' {
+			# Act.
+			$result = Invoke-GitClean -RootDirectoryPath $RootDirectoryPath
+
+			# Assert.
+			$result.NumberOfGitRepositoriesFound | Should -Be 0
+			$result.GitRepositoriesCleaned | Should -BeNullOrEmpty
+			$result.GitRepositoriesWithUntrackedFiles | Should -BeNullOrEmpty
+		}
+	}
+
 	Context 'There is a single git repository' {
 		BeforeEach {
 			$RootDirectoryPath = NewRandomRootDirectoryPath

@@ -206,10 +206,16 @@ function CleanGitRepository {
 	return $diskSpaceReclaimed
 }
 
+# This function performs a ForEach-Object loop with a progress bar to show the status and how many iterations are left.
 # Adding all the code inline to support Write-Progress made things feel very messy.
 # This function helps clean that up, but does add some complexity to the script, especially because
 # you cannot assign a variable in the script block a new value and have it persist outside the script block.
 function ForEachWithProgress([object[]] $collection, [scriptblock] $scriptBlock, [string] $activity, [string] $status) {
+	# If there are no items to process, then just return.
+	if ($null -eq $collection -or $collection.Count -eq 0) {
+		return
+	}
+
 	[int] $numberOfItems = $collection.Count
 	[int] $numberOfItemsProcessed = 0
 	$collection | ForEach-Object {
