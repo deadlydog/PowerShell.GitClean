@@ -8,7 +8,7 @@ Features:
 
 - Added the `-CalculateDiskSpaceReclaimed` switch to show how much disk space was reclaimed in the output.
 
-BREAKING CHNAGES:
+BREAKING CHANGES:
 
 - Renamed the `Clean-GitRepositories` cmdlet to `Invoke-GitClean`.
 
