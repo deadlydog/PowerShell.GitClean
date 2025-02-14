@@ -146,8 +146,15 @@ function Invoke-GitClean {
 }
 
 function GetGitRepositoryDirectoryPaths([string] $rootDirectory, [int] $depth) {
+	# Use System.IO.DirectoryInfo instead of Get-ChildItem for performance reasons.
+	$searchOptions = [System.IO.EnumerationOptions]::new()
+	$searchOptions.RecurseSubdirectories = $true
+	$searchOptions.MaxRecursionDepth = $depth
+	$searchOptions.MatchType = [System.IO.MatchType]::Simple
+	$searchOptions.AttributesToSkip = [System.IO.FileAttributes]::None
+
 	[string[]] $gitRepoPaths =
-	Get-ChildItem -Path $rootDirectory -Include '.git' -Recurse -Depth $depth -Force -Directory |
+		[System.IO.DirectoryInfo]::new($rootDirectory).GetDirectories('*.git', $searchOptions) |
 		ForEach-Object {
 			$gitDirectoryPath = $_.FullName
 			$gitRepositoryDirectoryPath = Split-Path -Path $gitDirectoryPath -Parent
