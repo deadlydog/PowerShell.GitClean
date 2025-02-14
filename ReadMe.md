@@ -121,13 +121,13 @@ With repositories at the following paths:
 Only clean `repo1` and `repo2`:
 
 ```powershell
-Invoke-GitClean -Path 'C:\path\to\repositories' -Depth 0
+Invoke-GitClean -Path 'C:\path\to\repositories' -Depth 1
 ```
 
 And to only clean `repo1`, `repo2`, `repo3`, and `repo4`:
 
 ```powershell
-Invoke-GitClean -Path 'C:\path\to\repositories' -Depth 1
+Invoke-GitClean -Path 'C:\path\to\repositories' -Depth 2
 ```
 
 ---
