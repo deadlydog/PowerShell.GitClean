@@ -146,15 +146,11 @@ function Invoke-GitClean {
 }
 
 function GetGitRepositoryDirectoryPaths([string] $rootDirectory, [int] $depth) {
-	# Use System.IO.DirectoryInfo instead of Get-ChildItem for performance reasons.
-	$searchOptions = [System.IO.EnumerationOptions]::new()
-	$searchOptions.RecurseSubdirectories = $true
-	$searchOptions.MaxRecursionDepth = $depth
-	$searchOptions.MatchType = [System.IO.MatchType]::Simple
-	$searchOptions.AttributesToSkip = [System.IO.FileAttributes]::None
-
+	# Ideally we would use System.IO.DirectoryInfo with System.IO.EnumerationOptions (for specifying the search depth)
+	# instead of Get-ChildItem for performance reasons. However, System.IO.EnumerationOptions is only available in .NET Core,
+	# so we cannot use it with Windows PowerShell. So we have to stick with the slower Get-ChildItem.
 	[string[]] $gitRepoPaths =
-		[System.IO.DirectoryInfo]::new($rootDirectory).GetDirectories('*.git', $searchOptions) |
+		Get-ChildItem -Path $rootDirectory -Include '.git' -Recurse -Depth $depth -Force -Directory |
 		ForEach-Object {
 			$gitDirectoryPath = $_.FullName
 			$gitRepositoryDirectoryPath = Split-Path -Path $gitDirectoryPath -Parent
