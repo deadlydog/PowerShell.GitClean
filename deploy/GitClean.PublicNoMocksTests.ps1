@@ -9,7 +9,7 @@ Describe 'Invoke-GitClean' {
 		[int] $UntrackedFileSizeInBytes = 1MB # Output is reported in MB, so 1MB is the minimum size to test with.
 
 		function NewRandomRootDirectoryPath() {
-			[string] $rootDirectoryPath = "$TestDrive\" + ([System.IO.Path]::GetRandomFileName().Split('.')[0])
+			[string] $rootDirectoryPath = "$TestDrive/" + ([System.IO.Path]::GetRandomFileName().Split('.')[0])
 			New-Item -Path $rootDirectoryPath -ItemType Directory -Force > $null
 			return $rootDirectoryPath
 		}
@@ -196,10 +196,10 @@ Describe 'Invoke-GitClean' {
 		BeforeEach {
 			$RootDirectoryPath = NewRandomRootDirectoryPath
 			$Repo1Path = NewRandomDirectoryPath -rootDirectoryPath "$RootDirectoryPath"
-			$Repo2Path = NewRandomDirectoryPath -rootDirectoryPath "$RootDirectoryPath\Level2"
-			$Repo3Path = NewRandomDirectoryPath -rootDirectoryPath "$RootDirectoryPath\Level2\Level3"
-			$Repo4Path = NewRandomDirectoryPath -rootDirectoryPath "$RootDirectoryPath\Level2\Level3\Level4"
-			$Repo5Path = NewRandomDirectoryPath -rootDirectoryPath "$RootDirectoryPath\Level2\Level3\Level4\Level5"
+			$Repo2Path = NewRandomDirectoryPath -rootDirectoryPath "$RootDirectoryPath/Level2"
+			$Repo3Path = NewRandomDirectoryPath -rootDirectoryPath "$RootDirectoryPath/Level2/Level3"
+			$Repo4Path = NewRandomDirectoryPath -rootDirectoryPath "$RootDirectoryPath/Level2/Level3/Level4"
+			$Repo5Path = NewRandomDirectoryPath -rootDirectoryPath "$RootDirectoryPath/Level2/Level3/Level4/Level5"
 
 			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'Used in the It blocks')]
 			$Repo1UntrackedFilePath = Join-Path -Path $Repo1Path -ChildPath $UntrackedFileName
