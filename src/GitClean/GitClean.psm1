@@ -149,7 +149,7 @@ function GetGitRepositoryDirectoryPaths([string] $rootDirectory, [int] $depth) {
 	[System.IO.DirectoryInfo[]] $gitDirectoryPaths = @()
 	# If this is Windows PowerShell, we need to use the slower Get-ChildItem cmdlet.
 	if ($PSVersionTable.PSEdition -eq 'Desktop') {
-		$gitDirectoryPaths = Get-ChildItem -Path $rootDirectory -Include '.git' -Recurse -Depth $depth -Force -Directory
+		$gitDirectoryPaths = Get-ChildItem -Path $rootDirectory -Filter '.git' -Recurse -Depth $depth -Force -Directory
 	}
 	# Else this is PowerShell Core, so we can use the faster System.IO.DirectoryInfo because it supports System.IO.EnumerationOptions.
 	else {
@@ -162,7 +162,7 @@ function GetGitRepositoryDirectoryPaths([string] $rootDirectory, [int] $depth) {
 		$gitDirectoryPaths = [System.IO.DirectoryInfo]::new($rootDirectory).GetDirectories('*.git', $searchOptions)
 	}
 
-	[string[]] $gitRepoPaths = $gitDirectoryPaths |
+	[string[]] $gitRepoPaths = $gitDirectoryPaths | Where-Object { $null -ne $_ } |
 		ForEach-Object {
 			$gitDirectoryPath = $_.FullName
 			$gitRepositoryDirectoryPath = Split-Path -Path $gitDirectoryPath -Parent
