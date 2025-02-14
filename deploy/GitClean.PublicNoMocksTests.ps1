@@ -36,6 +36,7 @@ Describe 'Invoke-GitClean' {
 
 	Context 'There are no git repositories' {
 		BeforeEach {
+			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'Used in the It blocks')]
 			$RootDirectoryPath = NewRandomRootDirectoryPath
 		}
 
