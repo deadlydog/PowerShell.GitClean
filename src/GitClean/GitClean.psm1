@@ -146,7 +146,6 @@ function Invoke-GitClean {
 }
 
 function GetGitRepositoryDirectoryPaths([string] $rootDirectory, [int] $depth) {
-
 	[System.IO.DirectoryInfo[]] $gitDirectoryPaths = @()
 	# If this is Windows PowerShell, we need to use the slower Get-ChildItem cmdlet.
 	if ($PSVersionTable.PSEdition -eq 'Desktop') {
@@ -163,9 +162,6 @@ function GetGitRepositoryDirectoryPaths([string] $rootDirectory, [int] $depth) {
 		$gitDirectoryPaths = [System.IO.DirectoryInfo]::new($rootDirectory).GetDirectories('*.git', $searchOptions)
 	}
 
-	# Ideally we would use System.IO.DirectoryInfo with System.IO.EnumerationOptions (for specifying the search depth)
-	# instead of Get-ChildItem for performance reasons. However, System.IO.EnumerationOptions is only available in .NET Core,
-	# so we cannot use it with Windows PowerShell. So we have to stick with the slower Get-ChildItem.
 	[string[]] $gitRepoPaths = $gitDirectoryPaths |
 		ForEach-Object {
 			$gitDirectoryPath = $_.FullName
