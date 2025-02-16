@@ -225,7 +225,7 @@ function CleanGitRepository {
 
 		WriteVerbose "Cleaning git repository using 'git clean -xfd': '$gitRepositoryDirectoryPath'"
 		[string] $gitCleanOutput = (& git -C "$gitRepositoryDirectoryPath" clean -xdf) | Out-String
-		WriteVerbose $gitCleanOutput
+		WriteVerbose ("Git clean output:" + [System.Environment]::NewLine + $gitCleanOutput.Trim())
 
 		[long] $repoSizeAfterCleaning = 0
 		if ($calculateDiskSpaceReclaimed) {
