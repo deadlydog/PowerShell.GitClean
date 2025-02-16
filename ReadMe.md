@@ -70,7 +70,7 @@ The following common parameters are also supported:
 
 - `WhatIf`: If provided, the cmdlet will not actually delete any files. It will only show you which repos would be cleaned, even if `-Force` is provided.
 - `Confirm`: If provided, the cmdlet will prompt you to confirm before cleaning each repository.
-- `Information`: If provided, the cmdlet will output general information about what it is doing.
+- `InformationAction`: If provided, the cmdlet will output general information about what it is doing.
 - `Verbose`: If provided, the cmdlet will output verbose information about what it is doing.
 
 The cmdlet returns a PSCustomObject with the following properties:
