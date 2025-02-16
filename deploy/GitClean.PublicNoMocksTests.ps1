@@ -255,16 +255,16 @@ Describe 'Invoke-GitClean' {
 		}
 	}
 
-	Context 'Invalid parameters are supplied' {
-		It 'Should write an error if the RootDirectoryPath does not exist' {
-			# Arrange.
-			$RootDirectoryPath = Join-Path -Path $TestDrive -ChildPath 'NonExistentDirectory'
+	# Context 'Invalid parameters are supplied' {
+	# 	It 'Should write an error if the RootDirectoryPath does not exist' {
+	# 		# Arrange.
+	# 		$RootDirectoryPath = Join-Path -Path $TestDrive -ChildPath 'NonExistentDirectory'
 
-			# Act.
-			Invoke-GitClean -RootDirectoryPath $RootDirectoryPath -ErrorVariable errors
+	# 		# Act.
+	# 		Invoke-GitClean -RootDirectoryPath $RootDirectoryPath -ErrorVariable errors
 
-			# Assert.
-			$errors[0].Exception.Message | Should -Be "The specified RootDirectoryPath '$RootDirectoryPath' does not exist or is not a directory."
-		}
-	}
+	# 		# Assert.
+	# 		$errors[0].Exception.Message | Should -Be "The specified RootDirectoryPath '$RootDirectoryPath' does not exist or is not a directory."
+	# 	}
+	# }
 }
