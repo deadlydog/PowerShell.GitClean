@@ -124,7 +124,7 @@ function Invoke-GitClean {
 
 	[int] $totalDiskSpaceReclaimedInMb = -1
 	if ($CalculateDiskSpaceReclaimed) {
-		Write-Information "Cleaning disk space reclaimed..."
+		Write-Information "Calculating disk space reclaimed..."
 		$totalDiskSpaceReclaimedInMb = ($diskSpaceReclaimedDictionary.Values | Measure-Object -Sum | Select-Object -ExpandProperty Sum) / 1MB
 		Write-Information "Total disk space reclaimed: $($totalDiskSpaceReclaimedInMb) MB"
 	}
