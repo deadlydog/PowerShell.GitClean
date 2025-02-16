@@ -69,40 +69,6 @@ jobs:
       - name: Run spellcheck
         uses: streetsidesoftware/cspell-action@v5
 
-      - name: Install GitVersion
-        uses: gittools/actions/gitversion/setup@v0
-        with:
-          versionSpec: '5.x'
-
-      - name: Get git metadata used to determine new version number
-        id: git-version
-        uses: gittools/actions/gitversion/execute@v0
-
-      - name: Determine the new version number
-        id: version-number
-        shell: pwsh
-        run: |
-          [string] $newVersionNumber = '${{ steps.git-version.outputs.majorMinorPatch }}'
-          [string] $prereleaseLabel = '${{ steps.git-version.outputs.preReleaseTag }}'
-
-          [string] $manuallyProvidedVersionNumber = '${{ inputs.versionNumber }}'
-          if (-not [string]::IsNullOrWhiteSpace($manuallyProvidedVersionNumber)) {
-            Write-Output "Using manually provided version number '$manuallyProvidedVersionNumber'."
-            $newVersionNumber = $manuallyProvidedVersionNumber
-          }
-
-          # The preReleaseTag is empty when building the default branch, so manually create a prerelease version number if needed.
-          if ([string]::IsNullOrWhiteSpace($prereleaseLabel)) {
-            [string] $dateTime = (Get-Date -Format 'yyyyMMddTHHmmss')
-            $prereleaseLabel = 'CI' + $dateTime + 'SHA' + '${{ steps.git-version.outputs.shortSha }}'
-          }
-          # PowerShell prerelease labels can only contain the characters 'a-zA-Z0-9', so sanitize it if needed.
-          $newVersionNumberPrereleaseLabel = $prereleaseLabel -replace '[^a-zA-Z0-9]', ''
-
-          Write-Output "Setting step output variables 'majorMinorPatch=$newVersionNumber' and 'prereleaseLabel=$newVersionNumberPrereleaseLabel'."
-          "majorMinorPatch=$newVersionNumber" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
-          "prereleaseLabel=$newVersionNumberPrereleaseLabel" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
-
       # Suppress rules if needed: https://learn.microsoft.com/en-us/powershell/utility-modules/psscriptanalyzer/using-scriptanalyzer
       - name: Run PowerShell linter with PSScriptAnalyzer
         shell: pwsh
@@ -160,6 +126,40 @@ jobs:
           # If you want to fail the build if the coverage is below a certain threshold, you can use the following options.
           # min-coverage-overall: 60
           # min-coverage-changed-files: 60
+
+      - name: Install GitVersion
+        uses: gittools/actions/gitversion/setup@v0
+        with:
+          versionSpec: '5.x'
+
+      - name: Get git metadata used to determine new version number
+        id: git-version
+        uses: gittools/actions/gitversion/execute@v0
+
+      - name: Determine the new version number
+        id: version-number
+        shell: pwsh
+        run: |
+          [string] $newVersionNumber = '${{ steps.git-version.outputs.majorMinorPatch }}'
+          [string] $prereleaseLabel = '${{ steps.git-version.outputs.preReleaseTag }}'
+
+          [string] $manuallyProvidedVersionNumber = '${{ inputs.versionNumber }}'
+          if (-not [string]::IsNullOrWhiteSpace($manuallyProvidedVersionNumber)) {
+            Write-Output "Using manually provided version number '$manuallyProvidedVersionNumber'."
+            $newVersionNumber = $manuallyProvidedVersionNumber
+          }
+
+          # The preReleaseTag is empty when building the default branch, so manually create a prerelease version number if needed.
+          if ([string]::IsNullOrWhiteSpace($prereleaseLabel)) {
+            [string] $dateTime = (Get-Date -Format 'yyyyMMddTHHmmss')
+            $prereleaseLabel = 'CI' + $dateTime + 'SHA' + '${{ steps.git-version.outputs.shortSha }}'
+          }
+          # PowerShell prerelease labels can only contain the characters 'a-zA-Z0-9', so sanitize it if needed.
+          $newVersionNumberPrereleaseLabel = $prereleaseLabel -replace '[^a-zA-Z0-9]', ''
+
+          Write-Output "Setting step output variables 'majorMinorPatch=$newVersionNumber' and 'prereleaseLabel=$newVersionNumberPrereleaseLabel'."
+          "majorMinorPatch=$newVersionNumber" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
+          "prereleaseLabel=$newVersionNumberPrereleaseLabel" | Out-File -FilePath $Env:GITHUB_OUTPUT -Encoding utf8 -Append
 
       - name: Create the module artifact
         shell: pwsh
