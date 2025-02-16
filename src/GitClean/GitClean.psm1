@@ -114,13 +114,13 @@ function Invoke-GitClean {
 
 	Write-Information "Testing git repositories to see which ones can be safely cleaned..."
 	$gitRepositoryDirectoryPathsWithUntrackedFiles = [System.Collections.ArrayList]::new()
-	$gitRepositoryDirectoryPathsThatAreSafeToClean = [System.Collections.ArrayList]::new()
+	$gitRepositoryDirectoryPathsToClean = [System.Collections.ArrayList]::new()
 	ForEachWithProgress -collection $gitRepositoryDirectoryPaths -scriptBlock {
 		param([string] $gitRepoDirectoryPath)
 
 		# If the -Force switch was provided, don't bother checking for untracked files; just add it to the list of repos to clean.
 		if ($Force) {
-			$gitRepositoryDirectoryPathsThatAreSafeToClean.Add($gitRepoDirectoryPath) > $null
+			$gitRepositoryDirectoryPathsToClean.Add($gitRepoDirectoryPath) > $null
 			return
 		}
 
@@ -128,13 +128,13 @@ function Invoke-GitClean {
 		if ($gitRepoHasUntrackedFiles) {
 			$gitRepositoryDirectoryPathsWithUntrackedFiles.Add($gitRepoDirectoryPath) > $null
 		} else {
-			$gitRepositoryDirectoryPathsThatAreSafeToClean.Add($gitRepoDirectoryPath) > $null
+			$gitRepositoryDirectoryPathsToClean.Add($gitRepoDirectoryPath) > $null
 		}
 	} -activity "Checking for untracked files" -status "Git repo '{0}'"
 
 	Write-Information "Cleaning git repositories..."
 	$diskSpaceReclaimedDictionary = [System.Collections.Generic.Dictionary[string, long]]::new()
-	ForEachWithProgress -collection $gitRepositoryDirectoryPathsThatAreSafeToClean -scriptBlock {
+	ForEachWithProgress -collection $gitRepositoryDirectoryPathsToClean -scriptBlock {
 		param([string] $gitRepoDirectoryPath)
 
 		[long] $diskSpaceReclaimed = CleanGitRepository -gitRepositoryDirectoryPath $gitRepoDirectoryPath -calculateDiskSpaceReclaimed $CalculateDiskSpaceReclaimed
@@ -165,7 +165,7 @@ function Invoke-GitClean {
 		DirectorySearchDepth = $DirectorySearchDepth
 		CalculateDiskSpaceReclaimed = $CalculateDiskSpaceReclaimed
 		NumberOfGitRepositoriesFound = $gitRepositoryDirectoryPaths.Count
-		GitRepositoriesCleaned = $gitRepositoryDirectoryPathsThatAreSafeToClean
+		GitRepositoriesCleaned = $gitRepositoryDirectoryPathsToClean
 		GitRepositoriesWithUntrackedFiles = $gitRepositoryDirectoryPathsWithUntrackedFiles
 		Duration = $duration
 		DiskSpaceReclaimedInMb = $totalDiskSpaceReclaimedInMb
