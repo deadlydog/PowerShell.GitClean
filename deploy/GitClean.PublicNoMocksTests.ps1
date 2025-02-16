@@ -41,7 +41,7 @@ Describe 'Invoke-GitClean' {
 			$nonExistentDirectoryPath = Join-Path -Path (Get-Location) -ChildPath 'NonExistentDirectory'
 
 			# Act.
-			Invoke-GitClean -RootDirectoryPath $nonExistentDirectoryPath -ErrorVariable errors
+			Invoke-GitClean -RootDirectoryPath $nonExistentDirectoryPath -ErrorVariable errors -ErrorAction SilentlyContinue
 
 			# Assert.
 			$errors[0].Exception.Message | Should -Be "The specified RootDirectoryPath '$nonExistentDirectoryPath' does not exist or is not a directory."
