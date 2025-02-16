@@ -183,6 +183,7 @@ function GetGitRepositoryDirectoryPaths([string] $rootDirectory, [int] $depth) {
 }
 
 function TestGitRepositoryHasUntrackedFile([string] $gitRepositoryDirectoryPath) {
+	Write-Verbose "Checking git repository for untracked files: '$gitRepositoryDirectoryPath'"
 	[string] $gitOutput = (& git -C "$gitRepositoryDirectoryPath" status) | Out-String
 
 	# NOTE: Git.exe currently only supports English output.
@@ -200,25 +201,27 @@ function CleanGitRepository {
 		[long] $repoSizeBeforeCleaning = 0
 		if ($calculateDiskSpaceReclaimed) {
 			# Use System.IO.DirectoryInfo instead of Get-ChildItem for performance reasons.
-			Write-Verbose "Calculating size of '$gitRepositoryDirectoryPath' before cleaning."
+			Write-Verbose "Calculating size of directory before cleaning: '$gitRepositoryDirectoryPath'"
 			$repoSizeBeforeCleaning = [System.IO.DirectoryInfo]::new($gitRepositoryDirectoryPath).GetFiles('*', 'AllDirectories') |
 				ForEach-Object { $_.Length } | Measure-Object -Sum | Select-Object -ExpandProperty Sum
 		}
 
-		Write-Verbose "Cleaning git repository at '$gitRepositoryDirectoryPath' using 'git clean -xfd'."
+		Write-Verbose "Cleaning git repository using 'git clean -xfd': '$gitRepositoryDirectoryPath'"
 		[string] $gitCleanOutput = (& git -C "$gitRepositoryDirectoryPath" clean -xdf) | Out-String
-		Write-Verbose $gitCleanOutput
+		if (-not [string]::IsNullOrWhiteSpace($gitCleanOutput)) {
+			Write-Verbose $gitCleanOutput
+		}
 
 		[long] $repoSizeAfterCleaning = 0
 		if ($calculateDiskSpaceReclaimed) {
 			# Use System.IO.DirectoryInfo instead of Get-ChildItem for performance reasons.
-			Write-Verbose "Calculating size of '$gitRepositoryDirectoryPath' after cleaning."
+			Write-Verbose "Calculating size of directory after cleaning: '$gitRepositoryDirectoryPath'"
 			$repoSizeAfterCleaning = [System.IO.DirectoryInfo]::new($gitRepositoryDirectoryPath).GetFiles('*', 'AllDirectories') |
 				ForEach-Object { $_.Length } | Measure-Object -Sum | Select-Object -ExpandProperty Sum
 		}
 
 		$diskSpaceReclaimed = $repoSizeBeforeCleaning - $repoSizeAfterCleaning
-		Write-Verbose "Disk space reclaimed: $diskSpaceReclaimed bytes"
+		Write-Verbose "Size before: '$repoSizeBeforeCleaning'. Size after: '$repoSizeAfterCleaning'. Disk space reclaimed: '$diskSpaceReclaimed' bytes."
 		Write-Verbose '----------'
 	}
 
