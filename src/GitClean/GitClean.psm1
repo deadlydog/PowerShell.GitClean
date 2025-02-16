@@ -88,7 +88,7 @@ function Invoke-GitClean {
 
 	[DateTime] $startTime = Get-Date
 
-	Write-Verbose "Validating the root directory path..."
+	WriteVerbose "Validating the root directory path..."
 	if ([string]::IsNullOrWhiteSpace($RootDirectoryPath)) {
 		$RootDirectoryPath = Get-Location
 	}
@@ -183,7 +183,7 @@ function GetGitRepositoryDirectoryPaths([string] $rootDirectory, [int] $depth) {
 }
 
 function TestGitRepositoryHasUntrackedFile([string] $gitRepositoryDirectoryPath) {
-	Write-Verbose "Checking git repository for untracked files: '$gitRepositoryDirectoryPath'"
+	WriteVerbose "Checking git repository for untracked files: '$gitRepositoryDirectoryPath'"
 	[string] $gitOutput = (& git -C "$gitRepositoryDirectoryPath" status) | Out-String
 
 	# NOTE: Git.exe currently only supports English output.
@@ -201,28 +201,26 @@ function CleanGitRepository {
 		[long] $repoSizeBeforeCleaning = 0
 		if ($calculateDiskSpaceReclaimed) {
 			# Use System.IO.DirectoryInfo instead of Get-ChildItem for performance reasons.
-			Write-Verbose "Calculating size of directory before cleaning: '$gitRepositoryDirectoryPath'"
+			WriteVerbose "Calculating size of directory before cleaning: '$gitRepositoryDirectoryPath'"
 			$repoSizeBeforeCleaning = [System.IO.DirectoryInfo]::new($gitRepositoryDirectoryPath).GetFiles('*', 'AllDirectories') |
 				ForEach-Object { $_.Length } | Measure-Object -Sum | Select-Object -ExpandProperty Sum
 		}
 
-		Write-Verbose "Cleaning git repository using 'git clean -xfd': '$gitRepositoryDirectoryPath'"
+		WriteVerbose "Cleaning git repository using 'git clean -xfd': '$gitRepositoryDirectoryPath'"
 		[string] $gitCleanOutput = (& git -C "$gitRepositoryDirectoryPath" clean -xdf) | Out-String
-		if (-not [string]::IsNullOrWhiteSpace($gitCleanOutput)) {
-			Write-Verbose $gitCleanOutput
-		}
+		WriteVerbose $gitCleanOutput
 
 		[long] $repoSizeAfterCleaning = 0
 		if ($calculateDiskSpaceReclaimed) {
 			# Use System.IO.DirectoryInfo instead of Get-ChildItem for performance reasons.
-			Write-Verbose "Calculating size of directory after cleaning: '$gitRepositoryDirectoryPath'"
+			WriteVerbose "Calculating size of directory after cleaning: '$gitRepositoryDirectoryPath'"
 			$repoSizeAfterCleaning = [System.IO.DirectoryInfo]::new($gitRepositoryDirectoryPath).GetFiles('*', 'AllDirectories') |
 				ForEach-Object { $_.Length } | Measure-Object -Sum | Select-Object -ExpandProperty Sum
 		}
 
 		$diskSpaceReclaimed = $repoSizeBeforeCleaning - $repoSizeAfterCleaning
-		Write-Verbose "Size before: '$repoSizeBeforeCleaning'. Size after: '$repoSizeAfterCleaning'. Disk space reclaimed: '$diskSpaceReclaimed' bytes."
-		Write-Verbose '----------'
+		WriteVerbose "Size before: '$repoSizeBeforeCleaning'. Size after: '$repoSizeAfterCleaning'. Disk space reclaimed: '$diskSpaceReclaimed' bytes."
+		WriteVerbose '----------'
 	}
 
 	return $diskSpaceReclaimed
@@ -253,4 +251,11 @@ function ForEachWithProgress([object[]] $collection, [scriptblock] $scriptBlock,
 		& $scriptBlock $_
 	}
 	Write-Progress -Activity $activity -Completed # Hide the progress bar.
+}
+
+function WriteVerbose([string] $message) {
+	if (-not [string]::IsNullOrWhiteSpace($message)) {
+		$time = Get-Date -Format 'HH:mm:ss.fff'
+		Write-Verbose "$time : $message"
+	}
 }
