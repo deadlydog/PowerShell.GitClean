@@ -4,6 +4,7 @@
 # These are integration tests that assume git.exe is installed and available in the PATH environment variable.
 
 Describe 'Invoke-GitClean' {
+	# Define variables and functions that we want available in all test cases.
 	BeforeAll {
 		[string] $UntrackedFileName = 'UntrackedFile.txt'
 		[int] $UntrackedFileSizeInBytes = 1MB # Output is reported in MB, so 1MB is the minimum size to test with.
@@ -255,16 +256,17 @@ Describe 'Invoke-GitClean' {
 		}
 	}
 
-	# Context 'Invalid parameters are supplied' {
-	# 	It 'Should write an error if the RootDirectoryPath does not exist' {
-	# 		# Arrange.
-	# 		$RootDirectoryPath = Join-Path -Path $TestDrive -ChildPath 'NonExistentDirectory'
+	Context 'Invalid parameters are supplied' {
+		It 'Should write an error if the RootDirectoryPath does not exist' {
+			# Arrange.
+			$tempPath = NewRandomRootDirectoryPath # For some reason the Pester cleanup step fails or this test in the CI/CD pipeline if we don't actually create a directory.
+			$nonExistentDirectoryPath = Join-Path -Path $tempPath -ChildPath 'NonExistentDirectory'
 
-	# 		# Act.
-	# 		Invoke-GitClean -RootDirectoryPath $RootDirectoryPath -ErrorVariable errors
+			# Act.
+			Invoke-GitClean -RootDirectoryPath $nonExistentDirectoryPath -ErrorVariable errors
 
-	# 		# Assert.
-	# 		$errors[0].Exception.Message | Should -Be "The specified RootDirectoryPath '$RootDirectoryPath' does not exist or is not a directory."
-	# 	}
-	# }
+			# Assert.
+			$errors[0].Exception.Message | Should -Be "The specified RootDirectoryPath '$nonExistentDirectoryPath' does not exist or is not a directory."
+		}
+	}
 }
