@@ -35,6 +35,19 @@ Describe 'Invoke-GitClean' {
 		}
 	}
 
+	Context 'Invalid parameters are supplied' {
+		It 'Should write an error if the RootDirectoryPath does not exist' {
+			# Arrange.
+			$nonExistentDirectoryPath = Join-Path -Path (Get-Location) -ChildPath 'NonExistentDirectory'
+
+			# Act.
+			Invoke-GitClean -RootDirectoryPath $nonExistentDirectoryPath -ErrorVariable errors
+
+			# Assert.
+			$errors[0].Exception.Message | Should -Be "The specified RootDirectoryPath '$nonExistentDirectoryPath' does not exist or is not a directory."
+		}
+	}
+
 	Context 'There are no git repositories' {
 		BeforeEach {
 			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'Used in the It blocks')]
@@ -253,19 +266,6 @@ Describe 'Invoke-GitClean' {
 
 			$result.NumberOfGitRepositoriesFound | Should -Be 2
 			$result.DiskSpaceReclaimedInMb | Should -Be (($UntrackedFileSizeInBytes / 1MB) * 2)
-		}
-	}
-
-	Context 'Invalid parameters are supplied' {
-		It 'Should write an error if the RootDirectoryPath does not exist' {
-			# Arrange.
-			$nonExistentDirectoryPath = Join-Path -Path (Get-Location) -ChildPath 'NonExistentDirectory'
-
-			# Act.
-			Invoke-GitClean -RootDirectoryPath $nonExistentDirectoryPath -ErrorVariable errors
-
-			# Assert.
-			$errors[0].Exception.Message | Should -Be "The specified RootDirectoryPath '$nonExistentDirectoryPath' does not exist or is not a directory."
 		}
 	}
 }
