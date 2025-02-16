@@ -259,8 +259,7 @@ Describe 'Invoke-GitClean' {
 	Context 'Invalid parameters are supplied' {
 		It 'Should write an error if the RootDirectoryPath does not exist' {
 			# Arrange.
-			$tempPath = NewRandomRootDirectoryPath # For some reason the Pester cleanup step fails or this test in the CI/CD pipeline if we don't actually create a directory.
-			$nonExistentDirectoryPath = Join-Path -Path $tempPath -ChildPath 'NonExistentDirectory'
+			$nonExistentDirectoryPath = Join-Path -Path (Get-Location) -ChildPath 'NonExistentDirectory'
 
 			# Act.
 			Invoke-GitClean -RootDirectoryPath $nonExistentDirectoryPath -ErrorVariable errors
