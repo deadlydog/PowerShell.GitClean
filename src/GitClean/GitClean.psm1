@@ -28,6 +28,17 @@ function Invoke-GitClean {
 	.PARAMETER Confirm
 		Prompts the user to confirm before cleaning each git repository.
 
+	.OUTPUTS
+		[PSCustomObject] The cmdlet returns an object containing the following properties:
+			- RootDirectoryPath: The root directory that was searched for git repositories.
+			- DirectorySearchDepth: The max depth from the root directory to search for git repositories.
+			- CalculateDiskSpaceReclaimed: If the amount of disk space reclaimed by the git clean operations was reported in the output.
+			- NumberOfGitRepositoriesFound: The number of git repositories found.
+			- GitRepositoriesCleaned: The git repositories that were cleaned.
+			- GitRepositoriesWithUntrackedFiles: The git repositories that were not cleaned because they had untracked files.
+			- Duration: The duration of the operation.
+			- DiskSpaceReclaimedInMb: The amount of disk space reclaimed by the git clean operations, in megabytes.
+
 	.EXAMPLE
 		PS> Invoke-GitClean -RootDirectoryPath 'C:\GitRepos'
 
@@ -64,17 +75,6 @@ function Invoke-GitClean {
 		PS> Invoke-GitClean -RootDirectoryPath 'C:\GitRepos' -InformationAction Continue -Verbose
 
 		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files, showing information messages and verbose output.
-
-	.OUTPUTS
-		[PSCustomObject] The result object containing the following properties:
-			- RootDirectoryPath: The root directory that was searched for git repositories.
-			- DirectorySearchDepth: The max depth from the root directory to search for git repositories.
-			- CalculateDiskSpaceReclaimed: If the amount of disk space reclaimed by the git clean operations was reported in the output.
-			- NumberOfGitRepositoriesFound: The number of git repositories found.
-			- GitRepositoriesCleaned: The git repositories that were cleaned.
-			- GitRepositoriesWithUntrackedFiles: The git repositories that were not cleaned because they had untracked files.
-			- Duration: The duration of the operation.
-			- DiskSpaceReclaimedInMb: The amount of disk space reclaimed by the git clean operations, in megabytes.
 
 	.LINK
 		https://github.com/deadlydog/PowerShell.GitClean
