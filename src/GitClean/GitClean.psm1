@@ -88,7 +88,7 @@ function Invoke-GitClean {
 
 	[DateTime] $startTime = Get-Date
 
-	Write-Information "Validating the root directory path..."
+	Write-Verbose "Validating the root directory path..."
 	if ([string]::IsNullOrWhiteSpace($RootDirectoryPath)) {
 		$RootDirectoryPath = Get-Location
 	}
