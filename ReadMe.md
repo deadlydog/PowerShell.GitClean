@@ -27,9 +27,9 @@ GitClean is a cross-platform PowerShell module that provides an `Invoke-GitClean
 ## ❓ Why this exists
 
 Developers often have 10s or 100s of git repositories cloned on their local machine.
-We don't always remember to clean up build artifacts and temporary files, such as NuGet packages and node_modules, when we are done.
+We don't always remember to clean up build artifacts and temporary files when we are done, such as NuGet packages and node_modules.
 These files can take up a lot of space on your hard drive.
-This module provides a simple way to clean up all of your git repositories at once, potentially allowing you to reclaim many GBs of disk space.
+This module provides a simple way to clean up all of your git repositories at once, allowing you to reclaim potentially GBs of disk space.
 
 ## 🖼️ Screenshots
 
