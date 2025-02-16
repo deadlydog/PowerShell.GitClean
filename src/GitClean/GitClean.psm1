@@ -209,7 +209,9 @@ function CleanGitRepository {
 
 		WriteVerbose "Cleaning git repository using 'git clean -xfd': '$gitRepositoryDirectoryPath'"
 		[string] $gitCleanOutput = (& git -C "$gitRepositoryDirectoryPath" clean -xdf) | Out-String
-		WriteVerbose ("Git clean output:" + [System.Environment]::NewLine + $gitCleanOutput.Trim())
+		if (-not [string]::IsNullOrWhiteSpace($gitCleanOutput)) {
+			WriteVerbose ("Git clean output:" + [System.Environment]::NewLine + $gitCleanOutput.Trim())
+		}
 
 		# Use System.IO.DirectoryInfo instead of Get-ChildItem for performance reasons.
 		WriteVerbose "Calculating size of directory after cleaning: '$gitRepositoryDirectoryPath'"
