@@ -77,7 +77,7 @@ function Invoke-GitClean {
 
 		[Parameter(Mandatory = $false, HelpMessage = 'The max depth from the root directory to search for git repositories in.')]
 		[Alias('Depth')]
-		[uint] $DirectorySearchDepth = 3,
+		[UInt32] $DirectorySearchDepth = 3,
 
 		[Parameter(Mandatory = $false, HelpMessage = 'If provided, the amount of disk space reclaimed by the git clean operations will be reported in the output. This will increase the time it takes to perform the operation.')]
 		[switch] $CalculateDiskSpaceReclaimed = $false,
