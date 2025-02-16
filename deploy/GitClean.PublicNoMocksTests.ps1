@@ -241,4 +241,17 @@ Describe 'Invoke-GitClean' {
 			$result.DiskSpaceReclaimedInMb | Should -Be (($UntrackedFileSizeInBytes / 1MB) * 2)
 		}
 	}
+
+	Context 'Invalid parameters are supplied' {
+		It 'Should write an error if the RootDirectoryPath does not exist' {
+			# Arrange.
+			$RootDirectoryPath = Join-Path -Path $TestDrive -ChildPath 'NonExistentDirectory'
+
+			# Act.
+			Invoke-GitClean -RootDirectoryPath $RootDirectoryPath -ErrorVariable errors
+
+			# Assert.
+			$errors[0].Exception.Message | Should -Be "The specified RootDirectoryPath '$RootDirectoryPath' does not exist or is not a directory."
+		}
+	}
 }

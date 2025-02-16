@@ -88,6 +88,13 @@ function Invoke-GitClean {
 
 	[DateTime] $startTime = Get-Date
 
+	Write-Information "Validating the root directory path..."
+	if (-not (Test-Path -Path $RootDirectoryPath -PathType Container)) {
+		Write-Error "The specified RootDirectoryPath '$RootDirectoryPath' does not exist or is not a directory."
+		return
+	}
+	$RootDirectoryPath = Resolve-Path -Path $RootDirectoryPath
+
 	Write-Information "Searching for git repositories in '$RootDirectoryPath'..."
 	[string[]] $gitRepositoryDirectoryPaths = GetGitRepositoryDirectoryPaths -rootDirectory $RootDirectoryPath -depth $DirectorySearchDepth
 
