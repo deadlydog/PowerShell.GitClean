@@ -156,6 +156,19 @@ Describe 'Invoke-GitClean' {
 			# Assert.
 			$result.DiskSpaceReclaimedInMb | Should -Be 0
 		}
+
+		It 'Should use the current directory when no RootDirectoryPath is provided' {
+			# Arrange.
+			CreateGitRepository -directoryPath $Repo1Path
+			Set-Location -Path $RootDirectoryPath
+
+			# Act.
+			$result = Invoke-GitClean
+
+			# Assert.
+			$result.RootDirectoryPath | Should -Be $RootDirectoryPath
+			$result.NumberOfGitRepositoriesFound | Should -Be 1
+		}
 	}
 
 	Context 'There are 3 git repositories' {

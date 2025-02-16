@@ -61,10 +61,10 @@ This module only provides one cmdlet: `Invoke-GitClean`
 
 It accepts the following parameters:
 
-- `RootDirectoryPath` (required): A directory path that all of your git repositories are located under. Alias: `Path`
+- `RootDirectoryPath`: The root directory to search for git repositories in. If not provided, the current directory will be used. Alias: `Path`
 - `DirectorySearchDepth`: The depth to search for git repositories under the `RootDirectoryPath`. A large value may increase the time it takes to discover git repositories. Default is 3. Alias: `Depth`
 - `CalculateDiskSpaceReclaimed`: If provided, the amount of disk space reclaimed by the git clean operations will be reported in the output. This will increase the time it takes to perform the operation.
-- `Force`: If provided, the cmdlet will clean all repositories, even if they have untracked files. __Be careful with this option!__
+- `Force`: If provided, all git repositories will be cleaned, even if they have untracked files. __Be careful with this switch!__
 
 The following common parameters are also supported:
 
@@ -89,7 +89,7 @@ The cmdlet returns a PSCustomObject with the following properties:
 Clean all git repositories under the current directory:
 
 ```powershell
-Invoke-GitClean -RootDirectoryPath (Get-Location)
+Invoke-GitClean
 ```
 
 ---
@@ -97,7 +97,7 @@ Invoke-GitClean -RootDirectoryPath (Get-Location)
 Do not clean any repositories, but show which ones would be cleaned:
 
 ```powershell
-Invoke-GitClean -Path 'C:\path\to\repositories' -WhatIf
+Invoke-GitClean -RootDirectoryPath 'C:\path\to\repositories' -WhatIf
 ```
 
 ---

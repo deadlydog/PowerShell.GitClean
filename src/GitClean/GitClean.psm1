@@ -11,10 +11,10 @@ function Invoke-GitClean {
 		to prompt the user to confirm before cleaning each repository.
 
 	.PARAMETER RootDirectoryPath
-		The root directory to search for git repositories under. Alias: Path.
+		The root directory to search for git repositories in. If not provided, the current directory will be used. Alias: Path.
 
 	.PARAMETER DirectorySearchDepth
-		The max depth from the root directory to search for git repositories in. Default is 3. Alias: Depth.
+		The max depth from the root directory to search for git repositories in. A large value may increase the time it takes to discover git repositories. Default is 3. Alias: Depth.
 
 	.PARAMETER CalculateDiskSpaceReclaimed
 		If provided, the amount of disk space reclaimed by the git clean operations will be reported in the output. This will increase the time it takes to perform the operation.
@@ -71,7 +71,7 @@ function Invoke-GitClean {
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Force', Justification = 'Used in a child scope')]
 	[CmdletBinding(SupportsShouldProcess)]
 	param (
-		[Parameter(Mandatory = $true, HelpMessage = 'The root directory to search for git repositories in.')]
+		[Parameter(Mandatory = $false, HelpMessage = 'The root directory to search for git repositories in. If not provided, the current directory will be used.')]
 		[Alias('Path')]
 		[string] $RootDirectoryPath,
 
@@ -82,13 +82,16 @@ function Invoke-GitClean {
 		[Parameter(Mandatory = $false, HelpMessage = 'If provided, the amount of disk space reclaimed by the git clean operations will be reported in the output. This will increase the time it takes to perform the operation.')]
 		[switch] $CalculateDiskSpaceReclaimed = $false,
 
-		[Parameter(Mandatory = $false, HelpMessage = 'If provided all git repositories will be cleaned, even if they have untracked files.')]
+		[Parameter(Mandatory = $false, HelpMessage = 'If provided, all git repositories will be cleaned, even if they have untracked files.')]
 		[switch] $Force = $false
 	)
 
 	[DateTime] $startTime = Get-Date
 
 	Write-Information "Validating the root directory path..."
+	if ([string]::IsNullOrWhiteSpace($RootDirectoryPath)) {
+		$RootDirectoryPath = Get-Location
+	}
 	if (-not (Test-Path -Path $RootDirectoryPath -PathType Container)) {
 		Write-Error "The specified RootDirectoryPath '$RootDirectoryPath' does not exist or is not a directory."
 		return
