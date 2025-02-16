@@ -64,7 +64,6 @@ It accepts the following parameters:
 
 - `RootDirectoryPath`: The root directory to search for git repositories in. If not provided, the current directory will be used. Alias: `Path`
 - `DirectorySearchDepth`: The depth to search for git repositories under the `RootDirectoryPath`. A large value may increase the time it takes to discover git repositories. Default is 3. Alias: `Depth`
-- `CalculateDiskSpaceReclaimed`: If provided, the amount of disk space reclaimed by the git clean operations will be reported in the output. This will increase the time it takes to perform the operation.
 - `Force`: If provided, all git repositories will be cleaned, even if they have untracked files. __Be careful with this switch!__
 
 The following common parameters are also supported:
@@ -78,12 +77,11 @@ The cmdlet returns a PSCustomObject with the following properties:
 
 - `RepositoryPath`: Path that was used to run the command.
 - `DirectorySearchDepth`: Depth that was used to run the command.
-- `CalculateDiskSpaceReclaimed`: Whether or not the disk space reclaimed was calculated.
 - `NumberOfGitRepositoriesFound`: Number of git repositories that were found.
 - `GitRepositoriesCleaned`: Array of the git repository directory paths that were cleaned.
 - `GitRepositoriesWithUntrackedFiles`: Array of the git repository directory paths that were not cleaned due to having untracked files.
 - `Duration`: How long the operation took to complete.
-- `DiskSpaceReclaimedInMb`: The amount of disk space in megabytes that was reclaimed by the git clean operations. -1 if `CalculateDiskSpaceReclaimed` was not provided.
+- `DiskSpaceReclaimedInMb`: The amount of disk space in megabytes that was reclaimed by the git clean operations.
 
 ### Examples
 
@@ -130,16 +128,6 @@ And to only clean `repo1`, `repo2`, `repo3`, and `repo4`:
 ```powershell
 Invoke-GitClean -Path 'C:\path\to\repositories' -Depth 2
 ```
-
----
-
-Clean all git repositories under the current directory and show how much disk space was reclaimed in the output:
-
-```powershell
-Invoke-GitClean -Path 'C:\path\to\repositories' -CalculateDiskSpaceReclaimed
-```
-
-NOTE: Calculating the disk space reclaimed will increase the time it takes to perform the operation, as the git directories will be scanned before and after the clean operation to determine how much disk space was reclaimed.
 
 ---
 

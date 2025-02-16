@@ -16,9 +16,6 @@ function Invoke-GitClean {
 	.PARAMETER DirectorySearchDepth
 		The max depth from the root directory to search for git repositories in. A large value may increase the time it takes to discover git repositories. Default is 3. Alias: Depth.
 
-	.PARAMETER CalculateDiskSpaceReclaimed
-		If provided, the amount of disk space reclaimed by the git clean operations will be reported in the output. This will increase the time it takes to perform the operation.
-
 	.PARAMETER Force
 		If provided, all git repositories will be cleaned, even if they have untracked files. Be careful with this switch!
 
@@ -32,7 +29,6 @@ function Invoke-GitClean {
 		[PSCustomObject] The cmdlet returns an object containing the following properties:
 			- RootDirectoryPath: The root directory that was searched for git repositories.
 			- DirectorySearchDepth: The max depth from the root directory to search for git repositories.
-			- CalculateDiskSpaceReclaimed: If the amount of disk space reclaimed by the git clean operations was reported in the output.
 			- NumberOfGitRepositoriesFound: The number of git repositories found.
 			- GitRepositoriesCleaned: The git repositories that were cleaned.
 			- GitRepositoriesWithUntrackedFiles: The git repositories that were not cleaned because they had untracked files.
@@ -65,13 +61,6 @@ function Invoke-GitClean {
 		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files, searching up to 2 child directories deep.
 
 	.EXAMPLE
-		PS> Invoke-GitClean -Path 'C:\GitRepos' -CalculateDiskSpaceReclaimed
-
-		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files, showing the amount of disk space reclaimed.
-
-		NOTE: Calculating the disk space reclaimed will increase the time it takes to perform the operation, as the git directories will be scanned before and after the clean operation to determine how much disk space was reclaimed.
-
-	.EXAMPLE
 
 		PS> $result = Invoke-GitClean -Path 'C:\path\to\repositories'
 		PS> $result.GitRepositoriesWithUntrackedFiles
@@ -96,9 +85,6 @@ function Invoke-GitClean {
 		[Parameter(Mandatory = $false, HelpMessage = 'The max depth from the root directory to search for git repositories in.')]
 		[Alias('Depth')]
 		[UInt32] $DirectorySearchDepth = 3,
-
-		[Parameter(Mandatory = $false, HelpMessage = 'If provided, the amount of disk space reclaimed by the git clean operations will be reported in the output. This will increase the time it takes to perform the operation.')]
-		[switch] $CalculateDiskSpaceReclaimed = $false,
 
 		[Parameter(Mandatory = $false, HelpMessage = 'If provided, all git repositories will be cleaned, even if they have untracked files.')]
 		[switch] $Force = $false
@@ -144,11 +130,8 @@ function Invoke-GitClean {
 	ForEachWithProgress -collection $gitRepositoryDirectoryPathsToClean -scriptBlock {
 		param([string] $gitRepoDirectoryPath)
 
-		[long] $diskSpaceReclaimed = CleanGitRepository -gitRepositoryDirectoryPath $gitRepoDirectoryPath -calculateDiskSpaceReclaimed $CalculateDiskSpaceReclaimed
-
-		if ($CalculateDiskSpaceReclaimed) {
-			$diskSpaceReclaimedDictionary.Add($gitRepoDirectoryPath, $diskSpaceReclaimed)
-		}
+		[long] $diskSpaceReclaimed = CleanGitRepository -gitRepositoryDirectoryPath $gitRepoDirectoryPath
+		$diskSpaceReclaimedDictionary.Add($gitRepoDirectoryPath, $diskSpaceReclaimed)
 	} -activity "Cleaning git repositories" -status "Git repo '{0}'"
 
 	if ($gitRepositoryDirectoryPathsWithUntrackedFiles.Count -gt 0) {
@@ -156,12 +139,10 @@ function Invoke-GitClean {
 			[System.Environment]::NewLine + ($gitRepositoryDirectoryPathsWithUntrackedFiles -join [System.Environment]::NewLine))
 	}
 
-	[int] $totalDiskSpaceReclaimedInMb = -1
-	if ($CalculateDiskSpaceReclaimed) {
-		WriteVerbose "Calculating disk space reclaimed..."
-		$totalDiskSpaceReclaimedInMb = ($diskSpaceReclaimedDictionary.Values | Measure-Object -Sum | Select-Object -ExpandProperty Sum) / 1MB
-		Write-Information "Total disk space reclaimed: $($totalDiskSpaceReclaimedInMb) MB"
-	}
+	[int] $totalDiskSpaceReclaimedInMb = 0
+	WriteVerbose "Calculating disk space reclaimed..."
+	$totalDiskSpaceReclaimedInMb = ($diskSpaceReclaimedDictionary.Values | Measure-Object -Sum | Select-Object -ExpandProperty Sum) / 1MB
+	Write-Information "Total disk space reclaimed: $($totalDiskSpaceReclaimedInMb) MB"
 
 	[DateTime] $finishTime = Get-Date
 	[TimeSpan] $duration = $finishTime - $startTime
@@ -170,7 +151,6 @@ function Invoke-GitClean {
 	[PSCustomObject] $result = @{
 		RootDirectoryPath = $RootDirectoryPath
 		DirectorySearchDepth = $DirectorySearchDepth
-		CalculateDiskSpaceReclaimed = $CalculateDiskSpaceReclaimed
 		NumberOfGitRepositoriesFound = $gitRepositoryDirectoryPaths.Count
 		GitRepositoriesCleaned = $gitRepositoryDirectoryPathsToClean
 		GitRepositoriesWithUntrackedFiles = $gitRepositoryDirectoryPathsWithUntrackedFiles
@@ -218,29 +198,23 @@ function TestGitRepositoryHasUntrackedFile([string] $gitRepositoryDirectoryPath)
 
 function CleanGitRepository {
 	[CmdletBinding(SupportsShouldProcess)]
-	param([string] $gitRepositoryDirectoryPath, [bool] $calculateDiskSpaceReclaimed)
+	param([string] $gitRepositoryDirectoryPath)
 
 	[long] $diskSpaceReclaimed = 0
 	if ($PSCmdlet.ShouldProcess($gitRepositoryDirectoryPath, 'git clean -xfd')) {
-		[long] $repoSizeBeforeCleaning = 0
-		if ($calculateDiskSpaceReclaimed) {
-			# Use System.IO.DirectoryInfo instead of Get-ChildItem for performance reasons.
-			WriteVerbose "Calculating size of directory before cleaning: '$gitRepositoryDirectoryPath'"
-			$repoSizeBeforeCleaning = [System.IO.DirectoryInfo]::new($gitRepositoryDirectoryPath).GetFiles('*', 'AllDirectories') |
-				ForEach-Object { $_.Length } | Measure-Object -Sum | Select-Object -ExpandProperty Sum
-		}
+		# Use System.IO.DirectoryInfo instead of Get-ChildItem for performance reasons.
+		WriteVerbose "Calculating size of directory before cleaning: '$gitRepositoryDirectoryPath'"
+		[long] $repoSizeBeforeCleaning = [System.IO.DirectoryInfo]::new($gitRepositoryDirectoryPath).GetFiles('*', 'AllDirectories') |
+			ForEach-Object { $_.Length } | Measure-Object -Sum | Select-Object -ExpandProperty Sum
 
 		WriteVerbose "Cleaning git repository using 'git clean -xfd': '$gitRepositoryDirectoryPath'"
 		[string] $gitCleanOutput = (& git -C "$gitRepositoryDirectoryPath" clean -xdf) | Out-String
 		WriteVerbose ("Git clean output:" + [System.Environment]::NewLine + $gitCleanOutput.Trim())
 
-		[long] $repoSizeAfterCleaning = 0
-		if ($calculateDiskSpaceReclaimed) {
-			# Use System.IO.DirectoryInfo instead of Get-ChildItem for performance reasons.
-			WriteVerbose "Calculating size of directory after cleaning: '$gitRepositoryDirectoryPath'"
-			$repoSizeAfterCleaning = [System.IO.DirectoryInfo]::new($gitRepositoryDirectoryPath).GetFiles('*', 'AllDirectories') |
-				ForEach-Object { $_.Length } | Measure-Object -Sum | Select-Object -ExpandProperty Sum
-		}
+		# Use System.IO.DirectoryInfo instead of Get-ChildItem for performance reasons.
+		WriteVerbose "Calculating size of directory after cleaning: '$gitRepositoryDirectoryPath'"
+		[long] $repoSizeAfterCleaning = [System.IO.DirectoryInfo]::new($gitRepositoryDirectoryPath).GetFiles('*', 'AllDirectories') |
+			ForEach-Object { $_.Length } | Measure-Object -Sum | Select-Object -ExpandProperty Sum
 
 		$diskSpaceReclaimed = $repoSizeBeforeCleaning - $repoSizeAfterCleaning
 		WriteVerbose "Size before: '$repoSizeBeforeCleaning'. Size after: '$repoSizeAfterCleaning'. Disk space reclaimed: '$diskSpaceReclaimed' bytes."

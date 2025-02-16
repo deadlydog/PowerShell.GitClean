@@ -148,13 +148,13 @@ Describe 'Invoke-GitClean' {
 			$result.GitRepositoriesWithUntrackedFiles[0] | Should -Be $Repo1Path
 		}
 
-		It 'Should report the correct disk space reclaimed when the switch is provided and files were removed' {
+		It 'Should report the correct disk space reclaimed when files were removed' {
 			# Arrange.
 			CreateGitRepository -directoryPath $Repo1Path -hasUntrackedFile
 
 			# Act.
 			# Use -Force to ensure the untracked files are deleted and reported on.
-			$result = Invoke-GitClean -RootDirectoryPath $RootDirectoryPath -Force -CalculateDiskSpaceReclaimed
+			$result = Invoke-GitClean -RootDirectoryPath $RootDirectoryPath -Force
 
 			# Assert.
 			$result.DiskSpaceReclaimedInMb | Should -Be ($UntrackedFileSizeInBytes / 1MB)
@@ -165,7 +165,7 @@ Describe 'Invoke-GitClean' {
 			CreateGitRepository -directoryPath $Repo1Path -hasUntrackedFile
 
 			# Act.
-			$result = Invoke-GitClean -RootDirectoryPath $RootDirectoryPath -Force -CalculateDiskSpaceReclaimed -WhatIf
+			$result = Invoke-GitClean -RootDirectoryPath $RootDirectoryPath -Force -WhatIf
 
 			# Assert.
 			$result.DiskSpaceReclaimedInMb | Should -Be 0
@@ -250,7 +250,7 @@ Describe 'Invoke-GitClean' {
 			CreateGitRepository -directoryPath $Repo5Path -hasUntrackedFile
 
 			# Act.
-			$result = Invoke-GitClean -RootDirectoryPath $RootDirectoryPath -Depth 2 -Force -CalculateDiskSpaceReclaimed
+			$result = Invoke-GitClean -RootDirectoryPath $RootDirectoryPath -Depth 2 -Force
 
 			# Assert.
 			$repo1UntrackedFileExists = Test-Path -Path $Repo1UntrackedFilePath

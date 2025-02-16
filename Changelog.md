@@ -2,6 +2,12 @@
 
 This page is a list of _notable_ changes made in each version.
 
+## v0.3.0 - Feb 16, 2015
+
+BREAKING CHANGES:
+
+- Removed the `-CalculateDiskSpaceReclaimed` switch, as the time it actually added to the total operation was very minimal, so we just always do it.
+
 ## v0.2.0 - Feb 13, 2015
 
 Features:
