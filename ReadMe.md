@@ -54,6 +54,7 @@ This assumes that there are multiple git repositories under the specified root d
 > [!NOTE]
 > __GitClean puts safety first:__ To avoid accidentally deleting files that have not yet been committed to git, this cmdlet will only clean repositories that have no untracked files.
 > This ensures you don't lose any work that you haven't committed yet.
+> Use the `-Force` parameter to bypass this safety check.
 
 ## 📖 Usage
 

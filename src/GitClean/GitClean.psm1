@@ -118,8 +118,14 @@ function Invoke-GitClean {
 	ForEachWithProgress -collection $gitRepositoryDirectoryPaths -scriptBlock {
 		param([string] $gitRepoDirectoryPath)
 
+		# If the -Force switch was provided, don't bother checking for untracked files; just add it to the list of repos to clean.
+		if ($Force) {
+			$gitRepositoryDirectoryPathsThatAreSafeToClean.Add($gitRepoDirectoryPath) > $null
+			return
+		}
+
 		[bool] $gitRepoHasUntrackedFiles = TestGitRepositoryHasUntrackedFile -gitRepositoryDirectoryPath $gitRepoDirectoryPath
-		if ($gitRepoHasUntrackedFiles -and -not $Force) {
+		if ($gitRepoHasUntrackedFiles) {
 			$gitRepositoryDirectoryPathsWithUntrackedFiles.Add($gitRepoDirectoryPath) > $null
 		} else {
 			$gitRepositoryDirectoryPathsThatAreSafeToClean.Add($gitRepoDirectoryPath) > $null
