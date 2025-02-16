@@ -73,7 +73,7 @@ function Invoke-GitClean {
 	param (
 		[Parameter(Mandatory = $false, HelpMessage = 'The root directory to search for git repositories in. If not provided, the current directory will be used.')]
 		[Alias('Path')]
-		[string] $RootDirectoryPath,
+		[string] $RootDirectoryPath = [string]::Empty,
 
 		[Parameter(Mandatory = $false, HelpMessage = 'The max depth from the root directory to search for git repositories in.')]
 		[Alias('Depth')]
