@@ -109,6 +109,14 @@ Invoke-GitClean -Path 'C:\path\to\repositories' -Force
 
 ---
 
+Prompt the user for confirmation before cleaning each repository:
+
+```powershell
+Invoke-GitClean -Path 'C:\path\to\repositories' -Confirm
+```
+
+---
+
 With repositories at the following paths:
 
 - `C:\path\to\repositories\repo1`

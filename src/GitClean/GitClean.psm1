@@ -53,7 +53,7 @@ function Invoke-GitClean {
 	.EXAMPLE
 		PS> Invoke-GitClean -RootDirectoryPath 'C:\GitRepos' -Confirm
 
-		Prompts the user to confirm before cleaning each git repository.
+		Prompt the user for confirmation before cleaning each repository.
 
 	.EXAMPLE
 		PS> Invoke-GitClean -Path 'C:\GitRepos' -DirectorySearchDepth 2
