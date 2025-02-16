@@ -136,10 +136,19 @@ Invoke-GitClean -Path 'C:\path\to\repositories' -Depth 2
 Clean all git repositories under the current directory and show how much disk space was reclaimed in the output:
 
 ```powershell
-Invoke-GitClean -RootDirectoryPath 'C:\path\to\repositories' -CalculateDiskSpaceReclaimed
+Invoke-GitClean -Path 'C:\path\to\repositories' -CalculateDiskSpaceReclaimed
 ```
 
 NOTE: Calculating the disk space reclaimed will increase the time it takes to perform the operation, as the git directories will be scanned before and after the clean operation to determine how much disk space was reclaimed.
+
+---
+
+List all git repositories that were not cleaned because they have untracked files:
+
+```powershell
+$result = Invoke-GitClean -Path 'C:\path\to\repositories'
+$result.GitRepositoriesWithUntrackedFiles
+```
 
 ---
 

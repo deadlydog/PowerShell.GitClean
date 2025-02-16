@@ -60,19 +60,26 @@ function Invoke-GitClean {
 		Prompts the user to confirm before cleaning each git repository.
 
 	.EXAMPLE
-		PS> Invoke-GitClean -RootDirectoryPath 'C:\GitRepos' -DirectorySearchDepth 2
+		PS> Invoke-GitClean -Path 'C:\GitRepos' -DirectorySearchDepth 2
 
 		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files, searching up to 2 child directories deep.
 
 	.EXAMPLE
-		PS> Invoke-GitClean -RootDirectoryPath 'C:\GitRepos' -CalculateDiskSpaceReclaimed
+		PS> Invoke-GitClean -Path 'C:\GitRepos' -CalculateDiskSpaceReclaimed
 
 		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files, showing the amount of disk space reclaimed.
 
 		NOTE: Calculating the disk space reclaimed will increase the time it takes to perform the operation, as the git directories will be scanned before and after the clean operation to determine how much disk space was reclaimed.
 
 	.EXAMPLE
-		PS> Invoke-GitClean -RootDirectoryPath 'C:\GitRepos' -InformationAction Continue -Verbose
+
+		PS> $result = Invoke-GitClean -Path 'C:\path\to\repositories'
+		PS> $result.GitRepositoriesWithUntrackedFiles
+
+		List all git repositories that were not cleaned because they have untracked files.
+
+	.EXAMPLE
+		PS> Invoke-GitClean -Path 'C:\GitRepos' -InformationAction Continue -Verbose
 
 		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files, showing information messages and verbose output.
 
