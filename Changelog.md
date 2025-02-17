@@ -2,6 +2,10 @@
 
 This page is a list of _notable_ changes made in each version.
 
+## v1.0.0 - Feb 17, 2015
+
+- Initial stable release of the module.
+
 ## v0.3.0 - Feb 16, 2015
 
 BREAKING CHANGES:
@@ -20,4 +24,4 @@ BREAKING CHANGES:
 
 ## v0.1.0 - Feb 12, 2015
 
-- Initial release
+- Initial release of beta module.
