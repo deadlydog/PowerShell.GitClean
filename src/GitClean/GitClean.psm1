@@ -105,7 +105,7 @@ function Invoke-GitClean {
 	Write-Information "Searching for git repositories in '$RootDirectoryPath'..."
 	[string[]] $gitRepositoryDirectoryPaths = GetGitRepositoryDirectoryPaths -rootDirectory $RootDirectoryPath -depth $DirectorySearchDepth
 
-	Write-Information "Testing git repositories to see which ones can be safely cleaned..."
+	Write-Information "Testing '$($gitRepositoryDirectoryPaths.Count)' git repositories to see which ones can be safely cleaned..."
 	$gitRepositoryDirectoryPathsWithUntrackedFiles = [System.Collections.ArrayList]::new()
 	$gitRepositoryDirectoryPathsToClean = [System.Collections.ArrayList]::new()
 	ForEachWithProgress -collection $gitRepositoryDirectoryPaths -scriptBlock {
@@ -125,7 +125,7 @@ function Invoke-GitClean {
 		}
 	} -activity "Checking for untracked files" -status "Git repo '{0}'"
 
-	Write-Information "Cleaning git repositories..."
+	Write-Information "Cleaning '$($gitRepositoryDirectoryPathsToClean.Count)' git repositories..."
 	$diskSpaceReclaimedDictionary = [System.Collections.Generic.Dictionary[string, long]]::new()
 	ForEachWithProgress -collection $gitRepositoryDirectoryPathsToClean -scriptBlock {
 		param([string] $gitRepoDirectoryPath)
@@ -134,8 +134,9 @@ function Invoke-GitClean {
 		$diskSpaceReclaimedDictionary.Add($gitRepoDirectoryPath, $diskSpaceReclaimed)
 	} -activity "Cleaning git repositories" -status "Git repo '{0}'"
 
-	if ($gitRepositoryDirectoryPathsWithUntrackedFiles.Count -gt 0) {
-		Write-Information ("The following git repo directories have untracked files, so they were not cleaned: " +
+	[int] $numberOfReposWithUntrackedFiles = $gitRepositoryDirectoryPathsWithUntrackedFiles.Count
+	if ($numberOfReposWithUntrackedFiles -gt 0) {
+		Write-Information ("The following '$numberOfReposWithUntrackedFiles' git repo directories have untracked files, so they were not cleaned: " +
 			[System.Environment]::NewLine + ($gitRepositoryDirectoryPathsWithUntrackedFiles -join [System.Environment]::NewLine))
 	}
 
