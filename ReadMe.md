@@ -33,7 +33,18 @@ This module provides a simple way to clean up all of your git repositories at on
 
 ## 🖼️ Screenshots
 
-Coming soon...
+Here is a screenshot of running `Invoke-GitClean` with no parameters, so it scans the current directory and subdirectories for git repositories and cleans them:
+
+![Example of running the Invoke-GitClean cmdlet with no parameters](docs/Images/invoke-gitclean-with-no-parameters.png)
+
+It found and cleaned 15 git repositories, reclaiming 461 MB of disk space in 1 minute and 14 seconds.
+
+Here is an example of explicitly providing the root directory path to scan for git repositories and displaying additional informational messages:
+
+![Example of running the Invoke-GitClean cmdlet with the RootDirectoryPath and InformationAction parameters](docs/Images/invoke-gitclean-with-root-directory-and-informational-messages-parameters.png)
+
+It found 262 git repositories, 2 of which had untracked files so they were not cleaned.
+By cleaning the other 260, it reclaimed 33.4 GB of disk space in 15 minutes and 18 seconds.
 
 ## 🚀 Quick start
 
