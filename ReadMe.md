@@ -94,6 +94,11 @@ The cmdlet returns a PSCustomObject with the following properties:
 - `Duration`: How long the operation took to complete.
 - `DiskSpaceReclaimedInMb`: The amount of disk space in megabytes that was reclaimed by the git clean operations.
 
+`Invoke-GitClean` also has the following aliases:
+
+- `Clean-GitRepositories`
+- `Git-Clean`
+
 ### Examples
 
 Clean all git repositories under the current directory:
@@ -163,6 +168,20 @@ Show general and verbose information about what the cmdlet is doing:
 
 ```powershell
 Invoke-GitClean -Path 'C:\path\to\repositories' -InformationAction Continue -Verbose
+```
+
+---
+
+Clean all git repositories under the current directory, using an `Invoke-GitClean` alias:
+
+```powershell
+Clean-GitRepositories
+```
+
+or
+
+```powershell
+Git-Clean
 ```
 
 ## ➕ How to contribute

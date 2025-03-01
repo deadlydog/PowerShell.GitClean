@@ -268,4 +268,62 @@ Describe 'Invoke-GitClean' {
 			$result.DiskSpaceReclaimedInMb | Should -Be (($UntrackedFileSizeInBytes / 1MB) * 2)
 		}
 	}
+
+	Context 'An alias is used for Invoke-GitClean and there is a single git repository' {
+		BeforeEach {
+			$RootDirectoryPath = NewRandomRootDirectoryPath
+			$Repo1Path = NewRandomDirectoryPath -rootDirectoryPath $RootDirectoryPath
+
+			[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSUseDeclaredVarsMoreThanAssignments', '', Justification = 'Used in the It blocks')]
+			$Repo1UntrackedFilePath = Join-Path -Path $Repo1Path -ChildPath $UntrackedFileName
+		}
+
+		It 'Should clean the git repository if there are no untracked files and Clean-GitRepositories is used' {
+			# Arrange.
+			CreateGitRepository -directoryPath $Repo1Path
+
+			# Act.
+			Clean-GitRepositories -RootDirectoryPath $RootDirectoryPath
+
+			# Assert.
+			$untrackedFileExists = Test-Path -Path $Repo1UntrackedFilePath
+			$untrackedFileExists | Should -Be $false
+		}
+
+		It 'Should not clean the git repository if there are untracked files and Clean-GitRepositories is used' {
+			# Arrange.
+			CreateGitRepository -directoryPath $Repo1Path -hasUntrackedFile
+
+			# Act.
+			Clean-GitRepositories -RootDirectoryPath $RootDirectoryPath
+
+			# Assert.
+			$untrackedFileExists = Test-Path -Path $Repo1UntrackedFilePath
+			$untrackedFileExists | Should -Be $true
+		}
+
+		It 'Should clean the git repository if there are no untracked files and Git-Clean is used' {
+			# Arrange.
+			CreateGitRepository -directoryPath $Repo1Path
+
+			# Act.
+			Git-Clean -RootDirectoryPath $RootDirectoryPath
+
+			# Assert.
+			$untrackedFileExists = Test-Path -Path $Repo1UntrackedFilePath
+			$untrackedFileExists | Should -Be $false
+		}
+
+		It 'Should not clean the git repository if there are untracked files and Git-Clean is used' {
+			# Arrange.
+			CreateGitRepository -directoryPath $Repo1Path -hasUntrackedFile
+
+			# Act.
+			Git-Clean -RootDirectoryPath $RootDirectoryPath
+
+			# Assert.
+			$untrackedFileExists = Test-Path -Path $Repo1UntrackedFilePath
+			$untrackedFileExists | Should -Be $true
+		}
+	}
 }

@@ -2,6 +2,7 @@ function Invoke-GitClean {
 	<#
 	.SYNOPSIS
 		Cleans all git repositories under a directory.
+		Aliases for Invoke-GitClean are: Clean-GitRepositories, Git-Clean.
 
 	.DESCRIPTION
 		This cmdlet will search for all git repositories in a directory and it's children and clean them using 'git clean -xfd'.
@@ -9,6 +10,8 @@ function Invoke-GitClean {
 		it will clean all repositories, even if they have untracked files. If the -WhatIf switch is provided, it will
 		only show which repositories would be cleaned, but will not actually clean them. The -Confirm switch can be used
 		to prompt the user to confirm before cleaning each repository.
+
+		Aliases for Invoke-GitClean are: Clean-GitRepositories, Git-Clean.
 
 	.PARAMETER RootDirectoryPath
 		The root directory to search for git repositories in. If not provided, the current directory will be used. Alias: Path.
@@ -72,11 +75,22 @@ function Invoke-GitClean {
 
 		Cleans all git repositories under 'C:\GitRepos' that do not have untracked files, showing information messages and verbose output.
 
+	.EXAMPLE
+
+		PS> Clean-GitRepositories
+
+		or
+
+		PS> Git-Clean
+
+		Clean all git repositories under the current directory, using an `Invoke-GitClean` alias.
+
 	.LINK
 		https://github.com/deadlydog/PowerShell.GitClean
 	#>
 	[Diagnostics.CodeAnalysis.SuppressMessageAttribute('PSReviewUnusedParameter', 'Force', Justification = 'Used in a child scope')]
 	[CmdletBinding(SupportsShouldProcess)]
+	[Alias('Clean-GitRepositories', "Git-Clean")]
 	param (
 		[Parameter(Mandatory = $false, HelpMessage = 'The root directory to search for git repositories in. If not provided, the current directory will be used.')]
 		[Alias('Path')]
