@@ -4,6 +4,12 @@ This page is a list of _notable_ changes made in each version.
 
 ## v1.1.0 - Feb 28, 2025
 
+Features:
+
+- Added the following aliases for the `Invoke-GitClean` cmdlet:
+  - `Clean-GitRepositories`
+  - `Git-Clean`
+
 ## v1.0.0 - Feb 17, 2025
 
 - Initial stable release of the module.
