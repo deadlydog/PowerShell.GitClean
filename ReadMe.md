@@ -22,7 +22,8 @@
 
 ## 💬 Description
 
-GitClean is a cross-platform PowerShell module that provides an `Invoke-GitClean` cmdlet to easily perform a [git clean -xfd](https://git-scm.com/docs/git-clean) on all git repositories under a specified directory in order to free up disk space.
+GitClean is a cross-platform PowerShell module that provides an `Invoke-GitClean` cmdlet (with a `Git-Clean` alias) to easily perform a [git clean -xfd](https://git-scm.com/docs/git-clean) on all git repositories under a specified directory in order to free up disk space.
+Git repositories with untracked files will not be cleaned by default, to avoid losing any work that has not yet been committed.
 
 ## ❓ Why this exists
 
@@ -109,6 +110,20 @@ Invoke-GitClean
 
 ---
 
+Clean all git repositories under the current directory, using an `Invoke-GitClean` alias:
+
+```powershell
+Clean-GitRepositories
+```
+
+or
+
+```powershell
+Git-Clean
+```
+
+---
+
 Do not clean any repositories, but show which ones would be cleaned:
 
 ```powershell
@@ -125,10 +140,10 @@ Invoke-GitClean -Path 'C:\path\to\repositories' -Force
 
 ---
 
-Prompt the user for confirmation before cleaning each repository:
+Prompt the user for confirmation before cleaning each repository, and use the `Git-Clean` alias:
 
 ```powershell
-Invoke-GitClean -Path 'C:\path\to\repositories' -Confirm
+Git-Clean -Path 'C:\path\to\repositories' -Confirm
 ```
 
 ---
@@ -168,20 +183,6 @@ Show general and verbose information about what the cmdlet is doing:
 
 ```powershell
 Invoke-GitClean -Path 'C:\path\to\repositories' -InformationAction Continue -Verbose
-```
-
----
-
-Clean all git repositories under the current directory, using an `Invoke-GitClean` alias:
-
-```powershell
-Clean-GitRepositories
-```
-
-or
-
-```powershell
-Git-Clean
 ```
 
 ## ➕ How to contribute
