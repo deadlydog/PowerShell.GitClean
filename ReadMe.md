@@ -25,6 +25,8 @@
 GitClean is a cross-platform PowerShell module that provides an `Invoke-GitClean` cmdlet (with a `Git-Clean` alias) to easily perform a [git clean -xfd](https://git-scm.com/docs/git-clean) on all git repositories under a specified directory in order to free up disk space.
 Git repositories with untracked files will not be cleaned by default, to avoid losing any work that has not yet been committed.
 
+If you enjoy this project, consider giving it a GitHub star ⭐ to show your support.
+
 ## ❓ Why this exists
 
 Developers often have 10s or 100s of git repositories cloned on their local machine.
