@@ -76,31 +76,39 @@ This module only provides one cmdlet: `Invoke-GitClean`
 
 It accepts the following parameters:
 
-- `RootDirectoryPath`: The root directory to search for git repositories in. If not provided, the current directory will be used. Alias: `Path`
-- `DirectorySearchDepth`: The depth to search for git repositories under the `RootDirectoryPath`. A large value may increase the time it takes to discover git repositories. Default is 3. Alias: `Depth`
-- `Force`: If provided, all git repositories will be cleaned, even if they have untracked files. __Be careful with this switch!__
+| Parameter              | Description                                                                                                                                        | Alias   | Default           |
+| ---------------------- | -------------------------------------------------------------------------------------------------------------------------------------------------- | ------- | ----------------- |
+| `RootDirectoryPath`    | The root directory to search for git repositories in. If not provided, the current directory will be used.                                         | `Path`  | Current directory |
+| `DirectorySearchDepth` | The depth to search for git repositories under the `RootDirectoryPath`. A large value may increase the time it takes to discover git repositories. | `Depth` | 3                 |
+| `Force`                | If provided, all git repositories will be cleaned, even if they have untracked files. __Be careful with this switch!__                             |         |                   |
 
 The following common parameters are also supported:
 
-- `WhatIf`: If provided, the cmdlet will not actually delete any files. It will only show you which repos would be cleaned, even if `-Force` is provided.
-- `Confirm`: If provided, the cmdlet will prompt you to confirm before cleaning each repository.
-- `InformationAction`: If provided, the cmdlet will output general information about what it is doing.
-- `Verbose`: If provided, the cmdlet will output verbose information about what it is doing.
+| Parameter           | Description                                                                                                                                   |
+| ------------------- | --------------------------------------------------------------------------------------------------------------------------------------------- |
+| `WhatIf`            | If provided, the cmdlet will not actually delete any files. It will only show you which repos would be cleaned, even if `-Force` is provided. |
+| `Confirm`           | If provided, the cmdlet will prompt you to confirm before cleaning each repository.                                                           |
+| `InformationAction` | If provided, the cmdlet will output general information about what it is doing.                                                               |
+| `Verbose`           | If provided, the cmdlet will output verbose information about what it is doing.                                                               |
 
 The cmdlet returns a PSCustomObject with the following properties:
 
-- `RepositoryPath`: Path that was used to run the command.
-- `DirectorySearchDepth`: Depth that was used to run the command.
-- `NumberOfGitRepositoriesFound`: Number of git repositories that were found.
-- `GitRepositoriesCleaned`: Array of the git repository directory paths that were cleaned.
-- `GitRepositoriesWithUntrackedFiles`: Array of the git repository directory paths that were not cleaned due to having untracked files.
-- `Duration`: How long the operation took to complete.
-- `DiskSpaceReclaimedInMb`: The amount of disk space in megabytes that was reclaimed by the git clean operations.
+| Property                            | Description                                                                                      |
+| ----------------------------------- | ------------------------------------------------------------------------------------------------ |
+| `RepositoryPath`                    | Path that was used to run the command.                                                           |
+| `DirectorySearchDepth`              | Depth that was used to run the command.                                                          |
+| `NumberOfGitRepositoriesFound`      | Number of git repositories that were found.                                                      |
+| `GitRepositoriesCleaned`            | Array of the git repository directory paths that were cleaned.                                   |
+| `GitRepositoriesWithUntrackedFiles` | Array of the git repository directory paths that were not cleaned due to having untracked files. |
+| `Duration`                          | How long the operation took to complete.                                                         |
+| `DiskSpaceReclaimedInMb`            | The amount of disk space in megabytes that was reclaimed by the git clean operations.            |
 
 `Invoke-GitClean` also has the following aliases:
 
-- `Clean-GitRepositories`
-- `Git-Clean`
+| Alias                   |
+| ----------------------- |
+| `Clean-GitRepositories` |
+| `Git-Clean`             |
 
 ### Examples
 
