@@ -25,6 +25,11 @@
 GitClean is a cross-platform PowerShell module that provides an `Invoke-GitClean` cmdlet (with a `Git-Clean` alias) to easily perform a [git clean -xfd](https://git-scm.com/docs/git-clean) on all git repositories under a specified directory in order to free up disk space.
 Git repositories with untracked files will not be cleaned by default, to avoid losing any work that has not yet been committed.
 
+> [!WARNING]
+> Do not run this command if you have files in your .gitignore that you want to keep, such as workspace or environment configuration files.
+> e.g. The `.vscode` directory or `.env` files.
+> Ideally those files should exist outside of your git repository when possible, such as in your user profile or environment variables.
+
 If you enjoy this project, consider giving it a GitHub star ⭐ to show your support.
 
 ## ❓ Why this exists
@@ -69,6 +74,11 @@ This assumes that there are multiple git repositories under the specified root d
 > __GitClean puts safety first:__ To avoid accidentally deleting files that have not yet been committed to git, this cmdlet will only clean repositories that have no untracked files.
 > This ensures you don't lose any work that you haven't committed yet.
 > Use the `-Force` parameter to bypass this safety check.
+
+> [!WARNING]
+> Do not run this command if you have files in your .gitignore that you want to keep, such as workspace or environment configuration files.
+> e.g. The `.vscode` directory or `.env` files.
+> Ideally those files should exist outside of your git repository when possible, such as in your user profile or environment variables.
 
 ## 📖 Usage
 
