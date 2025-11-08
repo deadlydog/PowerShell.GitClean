@@ -91,6 +91,8 @@ The following common parameters are also supported:
 | `InformationAction` | If provided, the cmdlet will output general information about what it is doing.                                                               |
 | `Verbose`           | If provided, the cmdlet will output verbose information about what it is doing.                                                               |
 
+### Output
+
 The cmdlet returns a PSCustomObject with the following properties:
 
 | Property                            | Description                                                                                      |
