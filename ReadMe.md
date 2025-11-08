@@ -72,7 +72,7 @@ This assumes that there are multiple git repositories under the specified root d
 
 ## 📖 Usage
 
-This module only provides one cmdlet: `Invoke-GitClean`
+This module only provides one cmdlet: `Invoke-GitClean` (aliases: `Git-Clean`, `Clean-GitRepositories`)
 
 It accepts the following parameters:
 
@@ -102,13 +102,6 @@ The cmdlet returns a PSCustomObject with the following properties:
 | `GitRepositoriesWithUntrackedFiles` | Array of the git repository directory paths that were not cleaned due to having untracked files. |
 | `Duration`                          | How long the operation took to complete.                                                         |
 | `DiskSpaceReclaimedInMb`            | The amount of disk space in megabytes that was reclaimed by the git clean operations.            |
-
-`Invoke-GitClean` also has the following aliases:
-
-| Alias                   |
-| ----------------------- |
-| `Clean-GitRepositories` |
-| `Git-Clean`             |
 
 ### Examples
 
