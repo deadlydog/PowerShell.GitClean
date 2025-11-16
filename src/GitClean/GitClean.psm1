@@ -5,7 +5,7 @@ function Invoke-GitClean {
 		Aliases for Invoke-GitClean are: Clean-GitRepositories, Git-Clean.
 
 	.DESCRIPTION
-		This cmdlet will search for all git repositories in a directory and it's children and clean them using 'git clean -xfd'.
+		This cmdlet will search for all git repositories in a directory and it's children and clean them using 'git clean -xdf'.
 		By default, it will only clean repositories that do not have untracked files. If the -Force switch is provided,
 		it will clean all repositories, even if they have untracked files. If the -WhatIf switch is provided, it will
 		only show which repositories would be cleaned, but will not actually clean them. The -Confirm switch can be used
@@ -216,13 +216,13 @@ function CleanGitRepository {
 	param([string] $gitRepositoryDirectoryPath)
 
 	[long] $diskSpaceReclaimed = 0
-	if ($PSCmdlet.ShouldProcess($gitRepositoryDirectoryPath, 'git clean -xfd')) {
+	if ($PSCmdlet.ShouldProcess($gitRepositoryDirectoryPath, 'git clean -xdf')) {
 		# Use System.IO.DirectoryInfo instead of Get-ChildItem for performance reasons.
 		WriteVerbose "Calculating size of directory before cleaning: '$gitRepositoryDirectoryPath'"
 		[long] $repoSizeBeforeCleaning = [System.IO.DirectoryInfo]::new($gitRepositoryDirectoryPath).GetFiles('*', 'AllDirectories') |
 			ForEach-Object { $_.Length } | Measure-Object -Sum | Select-Object -ExpandProperty Sum
 
-		WriteVerbose "Cleaning git repository using 'git clean -xfd': '$gitRepositoryDirectoryPath'"
+		WriteVerbose "Cleaning git repository using 'git clean -xdf': '$gitRepositoryDirectoryPath'"
 		[string] $gitCleanOutput = (& git -C "$gitRepositoryDirectoryPath" clean -xdf) | Out-String
 		if (-not [string]::IsNullOrWhiteSpace($gitCleanOutput)) {
 			WriteVerbose ("Git clean output:" + [System.Environment]::NewLine + $gitCleanOutput.Trim())
